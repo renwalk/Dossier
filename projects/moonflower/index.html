@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Moon Flower</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="controls">
+
+    <header id="topbar">
+      <div class="topbar-left">
+        <span class="dot"></span>
+        <span class="topbar-label">moonflower</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-status">simulation / active</span>
+        <span id="status-dot" class="status-dot"></span>
+      </div>
+    </header>
+
+    <div id="title-block">
+      <h1 class="app-title">moonflower</h1>
+      <p id="title-subtitle" class="tracked-label">Kaleidoscope · —</p>
+    </div>
+
+    <div id="moon-block">
+      <div id="moon-thumb"></div>
+      <div id="telemetry">
+        <div>
+          <p class="section-label">moon phase</p>
+          <div class="data-rows">
+            <div class="data-row"><span>Current Phase</span><span id="tel-phase">—</span></div>
+            <div class="data-row"><span>Illumination</span><span id="tel-illum">—</span></div>
+            <div class="data-row"><span>Distance</span><span id="tel-distance">—</span></div>
+            <div class="data-row"><span>Angular Diam.</span><span id="tel-angular">—</span></div>
+            <div class="data-row"><span>Limb Angle</span><span id="tel-limb">—</span></div>
+            <div class="data-row"><span>Observer</span><span id="tel-location">—</span></div>
+          </div>
+        </div>
+        <div id="checkbox-slot"></div>
+      </div>
+    </div>
+
+    <div id="params-block">
+      <p class="section-label">parameters</p>
+      <div id="sliders"></div>
+    </div>
+
+    <div id="actions-block">
+      <button id="play-button"><span class="play-icon">▶</span> Play</button>
+    </div>
+
+  </div>
+
+  <div id="canvas-container"></div>
+
+  <script src="sketch.js"></script>
+</body>
+
+</html>

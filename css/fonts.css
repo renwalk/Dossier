@@ -1,0 +1,57 @@
+/* Same three typefaces as the academic CV (../CV/templates/cv_academic.html.j2),
+   copied in from ../CV/fonts so the two documents read as one family of
+   materials. All self-hosted, no Google Fonts network dependency, matching
+   how the CV project itself serves them.
+
+   TiemposText only exists here as its italic cut (that's the only weight the
+   CV licenses) — used for italic accents, same as the CV's .overview text. */
+@font-face{
+  font-family: 'Inter';
+  src: url('../fonts/Inter_18pt-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Inter';
+  src: url('../fonts/Inter_18pt-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Inter';
+  src: url('../fonts/Inter_18pt-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Inter';
+  src: url('../fonts/Inter_18pt-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Inter';
+  src: url('../fonts/Inter_18pt-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: 'TiemposFine';
+  src: url('../fonts/tiempos-fine-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'TiemposText';
+  src: url('../fonts/tiempos-text-regular-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}

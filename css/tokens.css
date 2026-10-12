@@ -1,0 +1,24 @@
+/* ---------- Design tokens ----------
+   Single source of truth for color, type, and measure.
+   Pulled out of the old single-file draft so every section
+   (cv / intro / research / portfolio) and the pagination layer share it. */
+:root{
+  --paper: #F7F4EE;
+  --ink: #1E2019;
+  --ink-soft: #4B4E44;
+  --accent: #a3a3a3;      /* deep teal-green — ecological/data work */
+  --clay: #575756;        /* muted clay — section numerals only */
+  --rule: #DAD4C4;
+
+  /* Same three faces as the academic CV — see css/fonts.css */
+  --serif: 'TiemposText', Georgia, 'Times New Roman', serif;       /* italic-only cut, for accents */
+  --serif-display: 'TiemposFine', Georgia, serif;
+  --sans: 'Inter', -apple-system, Helvetica, Arial, sans-serif;
+
+  --measure: 640px;
+  --margin-col: 170px;
+  --page: 1080px;
+  --cover-gutter: clamp(1.25rem, 8vw, 3.5rem);
+  --cover-grid-gap: 1.5rem;
+  --cover-column-step: calc(10vw - 0.55rem);
+}

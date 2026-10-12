@@ -1,0 +1,1042 @@
+/* ---------- Shared layout & typography ----------
+   Component styles reused across cv / intro / research / portfolio sections.
+   No @page or pagination logic here — that lives in book.css. */
+
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Cover ----------
+   A real 10-column grid, per the client's own mockup. Only "Renée"
+   sits one column further out, at column 2 — everything else on the
+   left (the "Promotion Dossier" eyebrow, "Walker", and the facts
+   stack) lines up together at column 3. Each row uses the same
+   short-rule-mark device as .part-title. Colors stay on our own
+   ink/accent tokens. */
+.cover-page{
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  padding-inline: var(--cover-gutter);
+}
+.cover-inner{ max-width: none; width: 100%; }
+
+.cover-grid{
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  column-gap: var(--cover-grid-gap);
+  row-gap: 0.25rem; /* tight by default — the Renée/Walker rows need this;
+                       other rows add their own margin-top to compensate */
+  align-items: start;
+}
+.cover-col-body{ grid-column: 3 / 7; }  /* Promotion Dossier, Walker, facts */
+.cover-col-right{ grid-column: 7 / 11; }
+
+.cover-eyebrow{
+  position: relative;
+  grid-row: 1;
+  padding-top: 0.8rem;
+  margin-bottom: 1.2rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.cover-eyebrow::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--ink);
+}
+
+.cover-facts{
+  grid-row: 4;
+  margin-top: 3.5rem; /* restores the gap under "Walker" */
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.cover-fact{
+  position: relative;
+  max-width: 320px;
+  padding-top: 0.8rem;
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--ink-soft);
+}
+.cover-fact::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--ink);
+}
+.cover-nav{
+  grid-row: 4;
+  margin-top: 2.5rem; /* keeps it level with .cover-facts, which starts the same row */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.cover-nav a{
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--serif-display);
+  font-size: 1.35rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+.cover-nav a:last-child{ border-bottom: none; }
+
+@media (max-width: 900px){
+  .cover-grid{
+    grid-template-columns: 1fr;
+  }
+  .cover-col-body, .cover-col-right,
+  .cover-eyebrow, .cover-facts, .cover-nav{
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+/* ---------- Divider pages ----------
+   Every Part (CV / Introduction / Research / Portfolio) and every Portfolio
+   group (I. / II. / III.) opens on a page of its own, laid out like the
+   cover: the same ten-column grid, short-rule eyebrows at columns 3 and 7,
+   a large display-serif title stepping in from column 2 to column 3, and
+   (where there is something to list) the cover's ruled link list at column 7.
+   The section itself is the grid, so no wrapper is needed; the eyebrows and
+   the list reuse .cover-eyebrow / .cover-nav. */
+.divider{
+  --col-step: calc((100% - 9 * var(--cover-grid-gap)) / 10 + var(--cover-grid-gap));
+  align-content: center;
+  row-gap: 0.25rem;
+  min-height: 80vh;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.divider .divider-title{
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--serif-display);
+  font-weight: 400;
+  font-size: 3.5rem;                 
+  letter-spacing: 0.005em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+/* Each title line starts on the grid column named by its class (.c1 = the
+   first column, at the left edge of the grid), so lines can step in and out
+   across the page the way the poster's title does. */
+.divider-line{ display: block; }
+.divider-line.c1{ margin-left: 0; }
+.divider-line.c2{ margin-left: calc(1 * var(--col-step)); }
+.divider-line.c3{ margin-left: calc(2 * var(--col-step)); }
+.divider-line.c4{ margin-left: calc(3 * var(--col-step)); }
+.divider-line.c5{ margin-left: calc(4 * var(--col-step)); }
+/* Rules, borrowed from the poster and varied from page to page. Each divider
+   sets its own mix with custom properties on the <section> (see the style
+   attribute): --eb-l / --eb-r are the length of the bar over the left and
+   right eyebrow, --ebh-l / --ebh-r their thickness; --tb-col / --tb-len place
+   the bar under the title (start column from 0, length in columns) and --tb-h
+   is its thickness. Thick = 6px, thin = 1px. On top of that, a title line can
+   carry .dash (a short thick bar after it) or .leader (a hairline running from
+   the end of the word to the right edge of the grid). */
+.divider{
+  --bar: 6px;
+  --eb-l: 4.5rem;  --ebh-l: 6px;
+  --eb-r: 4.5rem;  --ebh-r: 6px;
+  --tb-col: 3;     --tb-len: 2;   --tb-h: 6px;
+}
+.divider .cover-eyebrow{ padding-top: 1.3rem; }
+.divider .cover-col-body::before{  width: var(--eb-l); height: var(--ebh-l); }
+.divider .cover-col-right::before{ width: var(--eb-r); height: var(--ebh-r); }
+.divider-title::after{
+  content: '';
+  display: block;
+  width: calc(var(--tb-len) * var(--col-step) - var(--cover-grid-gap));
+  height: var(--tb-h);
+  /* sits on the baseline of the line that would follow the title:
+     0.8036em is where TiemposFine's baseline falls below the top of a
+     0.9-line-height line box (measured), minus the bar's own thickness */
+  margin: calc(0.8036em - var(--tb-h)) 0 0 calc(var(--tb-col) * var(--col-step));
+  background: var(--ink);
+}
+/* align-items: baseline puts the bottom edge of the (empty) bar on the
+   baseline of the word beside it */
+.divider-line.dash, .divider-line.leader{
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+}
+.divider-line.dash::after{
+  content: '';
+  flex: none;
+  width: 4rem;
+  height: var(--bar);
+  background: var(--ink);
+}
+.divider-line.leader::after{
+  content: '';
+  flex: 1;
+  min-width: 0;
+  height: 1px;
+  background: var(--ink);
+}
+.divider .cover-nav{
+  grid-row: 3;
+  margin-top: 3.5rem;
+}
+.cover-nav .toc-page{
+  margin-left: auto;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.cover-nav .toc-page:empty{ display: none; } /* no page numbers on the web view */
+
+/* The cover uses the same system as the divider pages (it is a .divider grid):
+   title lines, bars, dash/leader rules and per-page custom properties all work
+   the same way. What differs is the list of facts, which gets its own mix of
+   rules, and a little vertical drift between the two columns on the web. */
+.cover-divider{ min-height: 0; }
+.cover-divider .cover-facts{ grid-row: 3; margin-top: 3.5rem; gap: 1.6rem; }
+.cover-divider .cover-nav{ grid-row: 3; margin-top: 6rem; }
+.cover-fact:nth-child(1)::before{ width: 4.5rem; height: 6px; }
+.cover-fact:nth-child(2)::before{ width: 100%;   height: 1px; }
+.cover-fact:nth-child(3)::before{ width: 7rem;   height: 6px; }
+.cover-fact{ padding-top: 1.3rem; line-height: 1.2; }
+
+/* ---------- Part titles (CV / Intro / Research / Portfolio openers) ----------
+   The short rule above the label and the tighter, stacked headline
+   below it are borrowed from a print-poster reference the client
+   shared (thin horizontal rule marks bracketing dense serif display
+   type) — kept to our own ink/accent colors, not its purple. */
+.part-title{
+  position: relative;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--clay);
+  margin: 0 0 0.6rem;
+  padding-top: 0.8rem;
+}
+.part-title::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--ink);
+}
+h1.chapter-title{
+  font-family: var(--serif-display);
+  font-weight: 400;
+  font-size: 2.1rem;
+  line-height: 1.05;
+  margin: 0 0 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+
+/* ---------- Section grid (text column + margin notes) ---------- */
+section{
+  margin-bottom: 3.2rem;
+  display: grid;
+  grid-template-columns: var(--margin-col) minmax(0, var(--measure)) var(--margin-col);
+  column-gap: 2.25rem;
+  justify-content: center;
+}
+section .content{ grid-column: 2; }
+
+/* CV body text starts on the same cover-grid column as "Walker" and the
+   facts; dates sit one grid column to its left. */
+section:has(.cv-category){
+  padding-inline: var(--cover-gutter);
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  column-gap: var(--cover-grid-gap);
+}
+section:has(.cv-category) .content{
+  grid-column: 3 / 9;
+}
+section.part-start:has(+ section .cv-category){
+  padding-inline: var(--cover-gutter);
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  column-gap: var(--cover-grid-gap);
+}
+section.part-start:has(+ section .cv-category) .content{
+  grid-column: 3 / 9;
+}
+
+/* Row hooks for sections that run a margin-note in step with a
+   specific paragraph — set via class, not inline style, so the
+   narrow-viewport override below can actually win the cascade. */
+.row-1{ grid-row: 1; }
+.row-2{ grid-row: 2; }
+.row-3{ grid-row: 3; }
+
+section .num{
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--clay);
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+section h2{
+  font-family: var(--serif-display);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  font-size: 1.7rem;
+  line-height: 1.3;
+  margin: 0 0 1.1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--accent);
+}
+
+/* ---------- Portfolio hierarchy ----------
+   Group (I., II.) > project (1., 2.) > sub-entry (a., b.) > sub-sub (i., ii.).
+   Numbers live in .head-num inside each heading. */
+.head-num{
+  font-family: var(--sans);
+  font-size: 0.5em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--clay);
+  margin-right: 0.8em;
+  vertical-align: 0.25em;
+}
+section h2.group-title{
+  font-size: 2.1rem;
+  line-height: 1.05;
+}
+section h2.group-title .head-num{
+  display: block;
+  font-size: 0.78rem;
+  margin: 0 0 0.5rem;
+  vertical-align: baseline;
+}
+/* Project headings (1., 2., ...) use the CV's sub-category style (see
+   .cv-subcategory): small semibold sans caps with the short rule above.
+   When a .project-meta eyebrow sits directly above, it already carries the
+   rule, so the heading drops its own. */
+section h2.project-title{
+  position: relative;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 0.9rem;
+  padding: 0.8rem 0 0;
+  border-bottom: none;
+}
+section h2.project-title::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--ink);
+}
+.project-meta + h2.project-title{ padding-top: 0; }
+.project-meta + h2.project-title::before{ display: none; }
+section h2.project-title .head-num{
+  font-size: 1em;
+  letter-spacing: inherit;
+  color: var(--clay);
+  margin-right: 0.6em;
+  vertical-align: baseline;
+}
+
+/* Sub-entries (a., b., ...) and sub-sub (i., ii.) stay in the display serif. */
+section h3.subproject, section h4.subproject{
+  font-family: var(--serif-display);
+  font-weight: 400;
+  line-height: 1.3;
+  margin: 0 0 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--accent);
+}
+section h3.subproject{ font-size: 1.45rem; }
+section h4.subproject{ font-size: 1.2rem; }
+
+p{ margin: 0 0 1.15rem; }
+p:last-child{ margin-bottom: 0; }
+strong{ font-weight: 600; }
+em{ font-style: italic; }
+
+/* Opening paragraph treatment for a chapter — TiemposText only ships
+   as an italic cut (same as the CV's .overview), so it has to be set
+   explicitly or the browser can't match the face and silently falls
+   back to Georgia. */
+.lede{
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+
+.callout{
+  border-left: 3px solid var(--accent);
+  padding: 0.2rem 0 0.2rem 1.3rem;
+  margin: 1.6rem 0;
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+}
+
+/* ---------- Margin notes / figures ---------- */
+.margin-note{
+  grid-row: 1;
+  padding-top: 0.15rem;
+}
+.margin-note.right{ grid-column: 1; }
+.margin-note.left{ grid-column: 1; }
+.margin-note img{
+  width: 100%;
+  display: block;
+  border: 1px solid var(--rule);
+}
+.margin-note figcaption{
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  margin-top: 0.5rem;
+}
+
+/* ---------- Portfolio plates ---------- */
+.plate{
+  grid-column: 1 / -1;
+  margin: 0 0 2.5rem;
+  max-width: var(--measure);
+  justify-self: center;
+}
+.plate img{
+  width: 100%;
+  display: block;
+  border: 1px solid var(--rule);
+}
+.plate figcaption{
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-top: 0.6rem;
+}
+.plate-placeholder{
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  background: var(--paper);
+  border: 1px dashed var(--rule);
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+}
+.plate .plate-title{
+  font-family: var(--sans);
+  font-weight: 600;
+  font-style: normal;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+/* ---------- Live plates ----------
+   A poster image that, on the web, a "Launch interactive" button swaps
+   for an <iframe> (js/assemble-web.js). The book never runs that
+   script, so it just prints the poster plus .print-url — book.css flips
+   which of those is visible. 16:10 matches the poster crop, so the
+   swap doesn't shift the layout. */
+.live-frame{
+  position: relative;
+  /* the poster's own proportions (width / height), set per piece with
+     style="--poster-r:1.275" on the .live-frame; the poster is never cropped */
+  aspect-ratio: var(--poster-r, 1.6);
+  background: var(--rule);
+}
+.live-frame img,
+.live-frame iframe{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.live-frame img{ object-fit: contain; border: 1px solid var(--rule); }
+/* Once the iframe has measured its content (fitToContent in
+   js/assemble-web.js) the fixed 16:10 box gives way to the iframe's own
+   height. */
+.live-frame.is-fitted{ aspect-ratio: auto; }
+.live-frame.is-fitted iframe{ position: static; display: block; }
+.live-launch{
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.55rem 1.1rem;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: 0;
+  cursor: pointer;
+}
+.live-launch:hover{ background: var(--clay); }
+/* Project-website plate: landing-page screenshot that links out. */
+.plate--site .plate-placeholder{ aspect-ratio: 16 / 10; }
+.plate--site a img{ transition: opacity .15s; }
+.plate--site a:hover img{ opacity: .85; }
+.plate--site .site-url{
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+
+/* ---------- Plate pages ----------
+   One .plate-page = one printed page of full-width images stacked top to
+   bottom, with every caption gathered into a numbered list at the foot.
+   Images run the full width of the 10-column grid (to the page margins in
+   the book); captions start on the text column. --r on each figure is the
+   image's width/height, used to cap very tall images (--hcap) without
+   distorting them. */
+.plate-page{
+  --hcap: 88vh;
+}
+/* Figure numbers run continuously through a project and start again at the next
+   one: each project's opening section carries .project-start, and
+   js/number-figures.js writes the numbers (data-fig). */
+.plate-figs .fig:not([data-fig])::after, .plate-captions li:not([data-fig])::before{ display: none; }
+.plate-figs{
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  /* One grid column plus its gutter, in this container's own width. --gx is how
+     far the container sticks out past the 10-column grid on each side (0 on
+     the web; the book widens it to the page margins). Used by the size classes. */
+  --gx: 0px;
+  --step: calc((100% - 2 * var(--gx) - 9 * var(--cover-grid-gap)) / 10 + var(--cover-grid-gap));
+  /* How many grid columns each size spans (the book overrides these) */
+  --cols-text: 6;
+  --cols-medium: 5;
+  --cols-small: 3;
+}
+/* Image sizes. A figure is full width (margin to margin) unless it carries a
+   size class:
+     fig--text     the width of the body text
+     fig--medium   a little narrower than the text
+     fig--small    narrower still
+   Anything smaller than full width starts on the text column; add fig--left
+   to start at the left edge of the grid, or fig--right to sit against the
+   right edge. --hcap still stops a tall image from running past the page. */
+.fig{
+  --w: 100%;
+  --ml: 0px;
+  position: relative;
+  margin: 0 0 0 var(--ml);
+  width: min(var(--w), calc(var(--hcap, 88vh) * var(--r, 1.333)));
+}
+.fig--text  { --w: calc(var(--cols-text)   * var(--step) - var(--cover-grid-gap)); --ml: calc(var(--gx) + 2 * var(--step)); }
+.fig--medium{ --w: calc(var(--cols-medium) * var(--step) - var(--cover-grid-gap)); --ml: calc(var(--gx) + 2 * var(--step)); }
+.fig--small { --w: calc(var(--cols-small)  * var(--step) - var(--cover-grid-gap)); --ml: calc(var(--gx) + 2 * var(--step)); }
+.fig--left  { --ml: var(--gx); }
+.fig--right { margin-left: auto; margin-right: var(--gx); }
+.fig img, .fig a{ display: block; width: 100%; }
+.fig img{ height: auto; border: 1px solid var(--rule); }
+.fig video{ display: block; width: 100%; height: auto; border: 1px solid var(--rule); background: #000; }
+.fig .plate-placeholder{ width: 100%; }
+.print-only{ display: none; }   /* the book turns these on, and .web-only off */
+/* Figure numbers, typeset like the TOC and CV left column: Tiempos italic
+   "fig. 1" with a thin rule under it. Beside an image that starts on the text
+   column (text, medium, small) it hangs in the left column, level with the top
+   of the image; under a full-width image (or one set against the left edge,
+   where there is no left column) it sits below. Pages with one image have none. */
+.plate-figs, .plate-captions{
+  --fignum-w: calc(var(--cover-column-step) - var(--cover-grid-gap));
+  --fignum-gap: var(--cover-grid-gap);
+}
+.plate-figs .fig::after{
+  content: 'fig. ' attr(data-fig);
+  display: block;
+  box-sizing: border-box;
+  width: var(--fignum-w);
+  margin: 0.4rem 0 0.35rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+.plate-figs :is(.fig--text, .fig--medium, .fig--small):not(.fig--left)::after{
+  position: absolute;
+  top: 0;
+  right: calc(100% + var(--fignum-gap));
+  margin: 0;
+}
+.plate-captions{
+  grid-column: 3 / 9;
+  margin-top: 0.9rem;
+}
+.plate-captions ol{ list-style: none; margin: 0; padding: 0; }
+.plate-captions li{
+  position: relative;
+  margin: 0 0 0.6rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+/* The caption's own "fig. N" stays inside the caption text, on the title's line. */
+.plate-captions li::before{
+  display: block;
+  float: left;
+  margin-right: 0.6em;
+  content: 'fig. ' attr(data-fig);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.plate-captions .plate-title{
+  font-family: var(--sans);
+  font-weight: 600;
+  font-style: normal;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.plate-captions .live-open, .plate-captions .site-url{
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+.plate-figs .plate{ max-width: none; width: 100%; margin: 0; }
+/* an image row placed under a text block on the same page */
+.content + .plate-figs{ margin-top: 1.6rem; }
+
+.plate .live-open{
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+.plate .live-open:not([href]){ display: none; }
+.print-url{
+  display: none;
+  margin-top: 0.3rem;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+
+/* ---------- CV entries ---------- */
+.cv-category{
+  font-family: var(--serif-display);
+  font-size: 1.15rem;
+  font-weight: 300;
+  font-variant-caps: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin: 0 0 0.9rem;
+}
+.cv-entry{
+  position: relative;
+  display: grid;
+  grid-template-columns: calc(var(--cover-column-step) - var(--cover-grid-gap)) minmax(0, 1fr);
+  column-gap: var(--cover-grid-gap);
+  width: calc(100% + var(--cover-column-step));
+  margin-left: calc(0px - var(--cover-column-step));
+  margin-bottom: calc(0.9rem + 0.75rem);
+  padding-bottom: 0.15em;
+}
+.cv-entry::after{
+  content: '';
+  position: absolute;
+  left: var(--cover-column-step);
+  right: 0;
+  bottom: 0;
+  border-top: 1px solid var(--rule);
+}
+.cv-entry:last-child::after,
+.cv-entry:has(+ .cv-group)::after{ display: none; }
+.cv-group:has(+ .cv-entry) .cv-entry:last-child::after{ display: block; }
+.cv-entry .cv-when{
+  position: relative;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: baseline;
+  width: 100%;
+  min-width: 0;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  display: block;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.cv-entry .cv-when::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  right: auto;
+  width: 100%;
+  bottom: -0.15em;
+  border-top: 1px solid var(--rule);
+}
+.cv-entry .cv-what{
+  grid-column: 2;
+  grid-row: 1;
+  align-self: baseline;
+  margin: 0;
+}
+.cv-entry .cv-desc{
+  grid-column: 2;
+  margin-top: 0.3rem;
+  color: var(--ink-soft);
+}
+.cv-note{
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--clay);
+  font-style: italic;
+}
+.cv-subcategory{
+  position: relative;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: calc(1.6rem + 3.3em) 0 0.7rem;
+  padding-top: 0.8rem;
+}
+.cv-subcategory::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--ink);
+}
+.cv-subcategory:first-of-type{ margin-top: 3.3em; }
+.cv-subcategory .cv-note{ text-transform: none; letter-spacing: 0; margin-left: 0.5rem; }
+
+/* Inline emphasis and small uppercase tags inside a .cv-what line —
+   carried over as-is from the source CV's own markup. */
+.ln-title{
+  font-family: var(--serif);
+  font-style: italic;
+}
+.ln-tag{
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--clay);
+  margin-left: 0.2rem;
+}
+
+/* Eyebrow line above a project heading — year + validation tag, same
+   short-rule device as .part-title. */
+.project-meta{
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: baseline;
+  padding-top: 0.7rem;
+  margin-bottom: 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.project-meta::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2rem;
+  height: 2px;
+  background: var(--ink);
+}
+.project-meta .tag{
+  color: var(--clay);
+  font-weight: 600;
+}
+
+/* ---------- Table of contents ----------
+   Laid out like a CV entry: the page number hangs in the column to the left of
+   the text (small sans, like the CV's dates), with a rule under it and a
+   separate rule under the text, the two joined by a gap. */
+.toc ol{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc li{
+  --toc-rule: 1px solid var(--rule);
+  position: relative;
+  display: grid;
+  grid-template-columns: calc(var(--cover-column-step) - var(--cover-grid-gap)) minmax(0, 1fr);
+  column-gap: var(--cover-grid-gap);
+  width: calc(100% + var(--cover-column-step));
+  margin-left: calc(0px - var(--cover-column-step));
+  align-items: baseline;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  padding: 0.6rem 0 0.75rem;
+}
+.toc li::before, .toc li::after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+}
+.toc li::after{ border-top: var(--toc-rule); }
+.toc li::before{ border-top: var(--toc-num-rule, var(--toc-rule)); }
+.toc li::before{ left: 0; width: calc(var(--cover-column-step) - var(--cover-grid-gap)); }
+.toc li::after{ left: var(--cover-column-step); right: 0; }
+.toc li:has(.toc-page:empty:not([data-year]))::before{ display: none; }  /* nothing in the left column: no rule */
+.toc .toc-page{
+  grid-column: 1;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.toc .toc-main{ grid-column: 2; min-width: 0; }
+.toc a{
+  color: var(--ink);
+  text-decoration: none;
+}
+/* Hierarchy: group > project > sub-entry > sub-sub, by type size,
+   weight, rule and indent rather than numbers. */
+.toc .toc-l0{
+  --toc-rule: 2px solid var(--accent);
+  margin-top: 1.6rem;
+  padding: 0.5rem 0 0.6rem;
+  font-style: normal;
+}
+.toc .toc-l0 a{
+  font-family: var(--serif-display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+.toc .toc-l1 a{
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.toc .toc-l2, .toc .toc-l3{ --toc-rule: none; }
+.toc .toc-l2{ font-size: 0.98rem; }
+.toc .toc-l3{ font-size: 0.9rem; }
+.toc .toc-l2 .toc-main{ padding-left: 1.5rem; }
+.toc .toc-l3 .toc-main{ padding-left: 3rem; }
+.toc .toc-back{ margin-top: 0.4rem; }
+/* The Portfolio's contents: no rules under the text, a light rule under each
+   number (as under the CV's dates), tighter rows, and section titles set like
+   the CV's category titles (see .cv-category). */
+.toc--portfolio li{
+  --toc-rule: none;
+  --toc-num-rule: 1px solid var(--rule);
+  padding: 0.2rem 0 0.3rem;
+}
+.toc--portfolio .toc-l0{
+  --toc-rule: none;
+  margin-top: 1.1rem;
+  padding: 0.25rem 0 0.35rem;
+}
+.toc--portfolio .toc-l2 .toc-main,
+.toc--portfolio .toc-l3 .toc-main{ padding-left: 0; }   /* no indents: level shows by type only */
+.toc--portfolio .toc-l0 a{
+  font-family: var(--serif-display);
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+.toc .toc-year{
+  margin-left: 0.5rem;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.toc .toc-tag{
+  margin-left: 0.5rem;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--clay);
+  white-space: nowrap;
+}
+
+/* ---------- Evidence appendix ---------- */
+.evidence-grid{
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.5rem 1.2rem;
+  margin-top: 1rem;
+}
+.evidence-item{
+  break-inside: avoid;
+}
+.evidence-item .evidence-thumb{
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem;
+  text-align: center;
+  background: var(--paper);
+  border: 1px dashed var(--rule);
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+.evidence-item .evidence-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.evidence-item .evidence-label{
+  margin-top: 0.5rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+/* ---------- Plain text list (e.g. Contributions to the Profession) ---------- */
+.text-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.text-list li{
+  position: relative;
+  padding-left: 1.1rem;
+  margin-bottom: 0.9rem;
+}
+.text-list li::before{
+  content: '\2013'; /* en dash */
+  position: absolute;
+  left: 0;
+  color: var(--clay);
+}
+.text-list li:last-child{ margin-bottom: 0; }
+
+/* ---------- Colophon ---------- */
+footer.colophon{
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+a{ color: inherit; }
+
+/* Narrow screens: drop margin columns below the text (screen preview only) */
+@media (max-width: 900px){
+  section:not(.cover-page){
+    grid-template-columns: 1fr;
+    padding-inline: clamp(1.25rem, 8vw, 3.5rem);
+  }
+  footer.colophon{ padding-inline: clamp(1.25rem, 8vw, 3.5rem); }
+  section .content{ grid-column: 1; }
+  section:has(.cv-category) .content{ grid-column: 1; }
+  section:has(.cv-category){
+    grid-template-columns: 1fr;
+  }
+  .margin-note.right, .margin-note.left{
+    grid-column: 1;
+    max-width: 260px;
+    margin: 1.2rem 0 0;
+  }
+  .row-1, .row-2, .row-3{ grid-row: auto; }
+}
+
+@media (max-width: 900px){
+  .cv-entry{
+    display: block;
+    width: auto;
+    margin-left: 0;
+  }
+  .cv-entry::after{ left: 0; }
+  .cv-entry .cv-when{
+    position: static;
+    width: fit-content;
+    text-align: left;
+    margin-bottom: 0.25rem;
+  }
+}

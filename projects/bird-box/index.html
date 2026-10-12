@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Bird Box</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside class="sidebar">
+            <h1>Bird<br>Box</h1>
+            <h2>> click birds on/off</h2>
+            <svg class="bird-key" viewBox="25 0 220 220" width="200" height="200" overflow="visible"
+                xmlns="http://www.w3.org/2000/svg">
+                <!-- Rings -->
+                <circle cx="110" cy="110" r="106" fill="none" stroke="#888" stroke-width="0.75" />
+                <circle cx="110" cy="110" r="77" fill="none" stroke="#888" stroke-width="0.75" />
+                <circle cx="110" cy="110" r="39" fill="none" stroke="#888" stroke-width="0.75" />
+                <circle cx="110" cy="110" r="14" fill="none" stroke="#888" stroke-width="0.75" />
+                <!-- Labels -->
+                <text x="110" y="20" text-anchor="middle" font-size="9" font-family="Reckham No1 Light, serif"
+                    letter-spacing="1.15" fill="#1a1816">WINGS</text>
+                <text x="110" y="50" text-anchor="middle" font-size="9" font-family="Reckham No1 Light, serif"
+                    letter-spacing="1.15" fill="#1a1816">BELLY</text>
+                <text x="110" y="83" text-anchor="middle" font-size="9" font-family="Reckham No1 Light, serif"
+                    letter-spacing="1.15" fill="#1a1816">HEAD</text>
+                <text x="110" y="113" text-anchor="middle" font-size="9" font-family="Reckham No1 Light, serif"
+                    letter-spacing="1.15" fill="#1a1816">BEAK</text>
+            </svg>
+
+            <nav class="bird-list" id="bird-list">
+                <!-- populated by script.js -->
+            </nav>
+        </aside>
+
+        <div id="p5-wrapper">
+            <div id="p5-container"></div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

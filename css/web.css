@@ -1,0 +1,134 @@
+/* ---------- Web-only layout ----------
+   Loaded only by index.html (the flowing online version). base.css's
+   section grid — margin-col + measure — is already the right layout
+   for this: wide, editorial, with side margin notes. .site-nav itself
+   lives in css/nav.css since book.html uses it too, as a plain
+   sticky header — this file overrides it to something book.html
+   doesn't want: hidden and fixed over the hero, fading in only once
+   the visitor scrolls past the cover (see js/assemble-web.js for the
+   IntersectionObserver that toggles .nav-visible). This file also
+   adds smooth in-page anchor jumps, in the spirit of
+   johncaserta.com — one continuous scroll instead of a separate
+   contents page. */
+
+.site-nav{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.site-nav.nav-visible{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Cover fills the full viewport on first load — the nav is fixed and
+   hidden at this point, so it takes no layout space to account for. */
+.cover-page{
+  min-height: 100vh;
+  padding: 3rem var(--cover-gutter);
+}
+
+/* Share one column system so the cover, CV, and narrative keep the same
+   text axis as the viewport changes. */
+.cover-grid{
+  width: calc(100% - 6vw);
+  margin-left: 6vw;
+}
+section:not(.cover-page){
+  width: 100%;
+  padding-left: calc(var(--cover-gutter) + 6vw);
+  padding-right: var(--cover-gutter);
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  column-gap: var(--cover-grid-gap);
+  justify-content: stretch;
+}
+section:not(.cover-page) .content{
+  grid-column: 3 / 9;
+  max-width: var(--measure);
+}
+.margin-note.left,
+.margin-note.right{
+  grid-column: 1 / 3;
+}
+.plate{
+  grid-column: 3 / 9;
+  justify-self: start;
+  width: 100%;
+  max-width: var(--measure);
+}
+/* A live piece needs room to breathe — BirdBox lays itself out by
+   container width, and at text-measure width it collapses to one or two
+   columns. Placed before the 900px block below, which resets it to one
+   column on small screens. */
+.plate--live{
+  grid-column: 3 / 11;
+  max-width: none;
+}
+section.part-start:has(#cv){
+  padding-left: calc(var(--cover-gutter) + 6vw);
+  padding-right: var(--cover-gutter);
+}
+section.part-start:has(#cv) .content{
+  width: auto;
+  max-width: var(--measure);
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 900px){
+  .cover-grid{
+    width: 100%;
+    margin-left: 0;
+  }
+  section:not(.cover-page){
+    grid-template-columns: 1fr;
+    padding-inline: clamp(1.25rem, 8vw, 3.5rem);
+  }
+  section:has(.cv-category),
+  section.part-start:has(#cv){
+    grid-template-columns: 1fr;
+  }
+  section:not(.cover-page) .content{
+    grid-column: 1;
+    max-width: var(--measure);
+  }
+  .plate{
+    grid-column: 1;
+    width: 100%;
+  }
+  section.part-start:has(#cv) .content{
+    grid-column: 1;
+    width: auto;
+    max-width: var(--measure);
+  }
+  section.part-start:has(#cv){
+    padding-inline: clamp(1.25rem, 8vw, 3.5rem);
+  }
+}
+
+/* Divider pages on small screens: titles drop back to the left edge and use
+   the cover name's smaller size. Web-only on purpose — a print/PDF viewport is
+   narrower than 900px too, and the book keeps its staggered columns. */
+@media (max-width: 900px){
+  .divider-line[class]{ margin-left: 0; }
+  section.divider .divider-title{ font-size: 3rem; }
+}
+
+/* Body-text-sized images match the text column, which stops at the measure. */
+.fig--text{
+  --w: min(calc(var(--cols-text) * var(--step) - var(--cover-grid-gap)), var(--measure));
+}
+
+/* The Portfolio's contents has no page numbers online, so its left column carries
+   each project's years instead (set from data-year), the way the CV puts dates
+   there. The book keeps page numbers in that column and the years after the title. */
+.toc--portfolio .toc-page[data-year]::before{ content: attr(data-year); }
+.toc--portfolio .toc-year{ display: none; }

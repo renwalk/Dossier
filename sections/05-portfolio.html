@@ -1,0 +1,883 @@
+<!--
+  PAGE FLOW
+    Group page (I., II., III.)  -> title only, own page
+    Project / sub-entry page    -> title + text
+    Image pages (.plate-page)   -> full-width images stacked top to bottom,
+                                   all captions in one numbered list at the
+                                   foot of the page. One <section class="plate-page">
+                                   is one printed page. To restack, move a
+                                   <figure class="fig"> and its caption <li> to
+                                   another plate-page (keep their order the same).
+                                   Pages with one image show no numbers.
+
+  STRUCTURE (see the Contents below)
+    Part title  -> divider page (h1.divider-title), like the cover
+    Group       -> divider page (h2.divider-title): I. Research / II. Professional Work / III. Collaborative Projects
+    Project     -> h2 .project-title     1., 2., 3.
+    Sub-entry   -> h3.subproject         a., b., c.
+    Sub-sub     -> h4.subproject         i., ii.
+  Numbers are typed into the headings (<span class="head-num">) and the
+  Contents list, so renumbering means editing both.
+
+  Each <section> below can run to as many .plate blocks (and pages) as the
+  work needs. To add an image, copy a .plate figure and swap the src/caption.
+  Bracketed text and .plate-placeholder boxes are prompts to replace.
+-->
+
+<section class="part-start divider" style="--eb-l:100%;--ebh-l:1px;--eb-r:7rem;--ebh-r:6px;--tb-col:0;--tb-len:2;--tb-h:6px;--eyl-row:2;--eyr-row:1;--t-row:4;--nav-row:10">
+  <p class="cover-eyebrow cover-col-body divider-part">Part Four</p>
+  <h1 class="divider-title" id="portfolio"><span class="divider-line c1 leader">RESEARCH &amp;</span><span class="divider-line c4">CREATIVE</span><span class="divider-line c1 dash">PRACTICE</span><span class="divider-line c3">PORTFOLIO</span></h1>
+  <nav class="cover-nav cover-col-right">
+    <a href="#portfolio-research">Research<span class="toc-page" data-target="#portfolio-research"></span></a>
+    <a href="#portfolio-professional">Professional Work<span class="toc-page" data-target="#portfolio-professional"></span></a>
+    <a href="#portfolio-collaborative">Collaborative Projects<span class="toc-page" data-target="#portfolio-collaborative"></span></a>
+  </nav>
+</section>
+
+<!-- Contents — doubles as the "recognition at a glance" page: every
+     project lists its year and validation right in the index. -->
+
+<section class="new-page">
+  <div class="content">
+    <h2>Contents</h2>
+    <nav class="toc toc--portfolio">
+      <ol>
+        <li class="toc-l0">
+          <span class="toc-page" data-target="#portfolio-research"></span>
+          <span class="toc-main"><a href="#portfolio-research">Research</a></span>
+        </li>
+        <li class="toc-l1">
+          <span class="toc-page" data-target="#project-data-sense" data-year="[years]"></span>
+          <span class="toc-main"><a href="#project-data-sense">Project Data Sense</a><span class="toc-year">[years]</span><span class="toc-tag">Funded &mdash; SEED Grant</span></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#temperature-quilt"></span>
+          <span class="toc-main"><a href="#temperature-quilt">Temperature Quilt</a></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#seeing-bird-songs" data-year="2021&ndash;2023"></span>
+          <span class="toc-main"><a href="#seeing-bird-songs">Seeing Bird Songs</a><span class="toc-year">2021&ndash;2023</span><span class="toc-tag">Published</span></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#energy-bodies" data-year="2025&ndash;2026"></span>
+          <span class="toc-main"><a href="#energy-bodies">Energy Bodies</a><span class="toc-year">2025&ndash;2026</span><span class="toc-tag">Juried &middot; International</span></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#moonflower"></span>
+          <span class="toc-main"><a href="#moonflower">Moonflower</a></span>
+        </li>
+        <li class="toc-l1">
+          <span class="toc-page" data-target="#aacsre-fellowship" data-year="2026&ndash;2027"></span>
+          <span class="toc-main"><a href="#aacsre-fellowship">AACSRE Emerging Fellowship</a><span class="toc-year">2026&ndash;2027</span><span class="toc-tag">Funded</span></span>
+        </li>
+        <li class="toc-l0">
+          <span class="toc-page" data-target="#portfolio-professional"></span>
+          <span class="toc-main"><a href="#portfolio-professional">Professional Work</a></span>
+        </li>
+        <li class="toc-l1">
+          <span class="toc-page" data-target="#decordova" data-year="[years]"></span>
+          <span class="toc-main"><a href="#decordova">deCordova Sculpture Park and Museum</a><span class="toc-year">[years]</span><span class="toc-tag">Commissioned</span></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#marvelous-surfaces"></span>
+          <span class="toc-main"><a href="#marvelous-surfaces">All the Marvelous Surfaces Exhibition Wallpaper</a></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#nature-sanctuary"></span>
+          <span class="toc-main"><a href="#nature-sanctuary">Nature Sanctuary Exhibition Identity and Signage</a></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#land-portal" data-year="2025"></span>
+          <span class="toc-main"><a href="#land-portal">Land Portal Map</a><span class="toc-year">2025</span><span class="toc-tag">[validation]</span></span>
+        </li>
+        <li class="toc-l1">
+          <span class="toc-page" data-target="#steegethomson"></span>
+          <span class="toc-main"><a href="#steegethomson">SteegeThomson</a></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#steege-rebrand"></span>
+          <span class="toc-main"><a href="#steege-rebrand">Rebrand</a></span>
+        </li>
+        <li class="toc-l1">
+          <span class="toc-page" data-target="#testing-wisely" data-year="[years]"></span>
+          <span class="toc-main"><a href="#testing-wisely">Testing Wisely</a><span class="toc-year">[years]</span><span class="toc-tag">Funded &mdash; NIH</span></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#decision-maps"></span>
+          <span class="toc-main"><a href="#decision-maps">Decision Maps and Testing Calculators</a></span>
+        </li>
+        <li class="toc-l0">
+          <span class="toc-page" data-target="#portfolio-collaborative"></span>
+          <span class="toc-main"><a href="#portfolio-collaborative">Collaborative Projects</a></span>
+        </li>
+        <li class="toc-l1">
+          <span class="toc-page" data-target="#intersections" data-year="2025"></span>
+          <span class="toc-main"><a href="#intersections">Intersections: Health, Environment &amp; Design</a><span class="toc-year">2025</span><span class="toc-tag">Invited &middot; International</span></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#biennale"></span>
+          <span class="toc-main"><a href="#biennale">Biennale Exhibition Creative Direction</a></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#symposium"></span>
+          <span class="toc-main"><a href="#symposium">Symposium</a></span>
+        </li>
+        <li class="toc-l1">
+          <span class="toc-page" data-target="#harm-reduction" data-year="[year]"></span>
+          <span class="toc-main"><a href="#harm-reduction">Harm Reduction Research</a><span class="toc-year">[year]</span><span class="toc-tag">Accepted for Publication</span></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#sticker-project"></span>
+          <span class="toc-main"><a href="#sticker-project">Sticker Project</a></span>
+        </li>
+        <li class="toc-l2">
+          <span class="toc-page" data-target="#popup-booth"></span>
+          <span class="toc-main"><a href="#popup-booth">Pop-up Shop Booth</a></span>
+        </li>
+        <li class="toc-back">
+          <span class="toc-page" data-target="#contributions"></span>
+          <span class="toc-main"><a href="#contributions">Contributions to the Profession</a></span>
+        </li>
+        <li class="toc-back">
+          <span class="toc-page" data-target="#evidence-appendix"></span>
+          <span class="toc-main"><a href="#evidence-appendix">Evidence Appendix</a></span>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<!-- I. RESEARCH -->
+
+<section class="new-page group-start divider divider--group" style="--eb-l:4.5rem;--ebh-l:6px;--eb-r:4.5rem;--ebh-r:6px;--tb-col:4;--tb-len:3;--tb-h:1px;--eyl-row:4;--eyr-row:3;--t-row:5;--nav-row:8">
+  <p class="cover-eyebrow cover-col-body">Portfolio &middot; I</p>
+  <p class="cover-eyebrow cover-col-right">Research &amp; Creative<br>Practice Portfolio</p>
+  <h2 class="divider-title" id="portfolio-research"><span class="divider-line c1 dash">RESEARCH</span></h2>
+  <nav class="cover-nav cover-col-right">
+    <a href="#project-data-sense">Project Data Sense<span class="toc-page" data-target="#project-data-sense"></span></a>
+    <a href="#aacsre-fellowship">AACSRE Emerging Fellowship<span class="toc-page" data-target="#aacsre-fellowship"></span></a>
+  </nav>
+</section>
+
+<!-- 1. Project Data Sense (overview + SEED-funded prototypes) -->
+
+<section class="new-page project-start">
+  <div class="content">
+    <p class="project-meta"><span class="tag">Funded &mdash; SEED Grant</span> [years]</p>
+    <h2 class="project-title" id="project-data-sense"><span class="head-num">1.</span>Project Data Sense</h2>
+    <p>Project Data Sense began with experiments translating weather data into color, using perceived color properties to make conditions something that could be felt rather than only read. The work has grown into a body of research spanning quilts, bird songs, body-movement visualization, and more. [Confirm or revise this overview.]</p>
+    <p>Supported by a 2023 SEED grant, I worked with two research assistants to move Project Data Sense from concept to a body of working prototypes spanning haptic wearables, tactile cues, environmental graphics, and learning tools &mdash; developed through direct community engagement, including testing sessions with regional birding groups and accessibility advocates.</p>
+  </div>
+
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.743"><a href="https://project-data-sense.com/" target="_blank" rel="noopener"><img src="assets/portfolio/project-data-sense/01-website.png" alt="Landing page of the Project Data Sense website: large white text on black reading &ldquo;Project Data Sense combines algorithmic design with creative coding to create multi-sensory data experiences that enhance emotional engagement and accessibility,&rdquo; with About and Contact links"></a></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Project website</span><a class="site-url" href="https://project-data-sense.com/" target="_blank" rel="noopener">project-data-sense.com &nearr;</a></li>
+      </ol>
+    </div>
+</section>
+
+<!-- a. Temperature Quilt -->
+
+<section class="new-page">
+  <div class="content">
+    <p class="project-meta"><span class="tag">exhibited</span> 2023</p>
+    <h3 class="subproject" id="temperature-quilt"><span class="head-num">a.</span>Temperature Quilt</h3>
+    <p>As temperatures warm around the globe, the Current Temp Quilt visualizes temperatures from different cities around the globe with jSON weather data. Like the feeling of heat on your skin, this display converts current temperature data to color values on a scale from cold to warm mapped with cooler temps in the blue-green range to hotter in the red-orange. The display allows for comparison among cities giving you an at a glance sense of what the world feels like right now.
+</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.388"><img src="assets/portfolio/temperature-quilt/01-legend-and-grid.png" alt="The temperature quilt interface: a key reading Actual for the outer square and Feels Like for the inner circle, a grid of nine city names, a temperature scale from 0 to 100 from teal to orange, and a three-by-three grid of colored squares each holding a colored circle"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Temperature quilt</span>Nine cities, each a square of color: the square shows the actual temperature and the circle inside it shows how the temperature feels, on a scale from 0 (teal) to 100 (orange). Philadelphia, Boston, Phoenix, Seattle, Paris, New York, Los Angeles, Dubai, Melbourne.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page">
+    <div class="plate-figs">
+      <figure class="fig fig--medium" style="--r:0.980"><img src="assets/portfolio/temperature-quilt/02-grid-warm.jpg" alt="A three-by-three grid of colored squares each holding a colored circle, mostly oranges and olive greens with one green"></figure>
+      <figure class="fig fig--medium" style="--r:0.999"><img src="assets/portfolio/temperature-quilt/03-grid-cool.png" alt="A three-by-three grid of colored squares each holding a colored circle, in cool greens and teals"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">The quilt on a warmer day</span>The same grid at a warmer moment [confirm date or conditions].</li>
+        <li><span class="plate-title">The quilt on a cooler day</span>The same grid at a cooler moment [confirm date or conditions].</li>
+      </ol>
+    </div>
+</section>
+
+<!-- b. Seeing Bird Songs -->
+
+<section class="new-page">
+  <div class="content">
+    <p class="project-meta"><span class="tag">Published</span> 2021&ndash;2023</p>
+    <h3 class="subproject" id="seeing-bird-songs"><span class="head-num">b.</span>Seeing Bird Songs</h3>
+    <p><em>Seeing Bird Songs</em> uses algorithmic methods to translate bird vocalizations into visual forms that make each species recognizable through multiple sensory channels &mdash; developed through direct testing with regional birding groups and accessibility advocates, and published in the print edition of <em>Nightingale Magazine&rsquo;s</em> Nature issue.</p>
+  </div>
+  <div class="plate-figs">
+    <!-- Live piece: poster + "Launch interactive" on the web, poster + a line of text in the book.
+       data-embed  = what the web iframe loads (a path in this site, or a full URL).
+       data-print-url = optional public URL to print under the poster in the book; leave it
+       off until the piece has one (the book then says it's in the online edition). -->
+    <figure class="plate plate--live" data-embed="projects/bird-box/index.html">
+    <div class="live-frame" style="--poster-r:1.275">
+      <img src="assets/portfolio/seeing-bird-songs/birdbox-poster.png" alt="Bird Box: a grid of concentric-ring circles, one per species, each colored from that bird's plumage">
+      <button type="button" class="live-launch">Launch interactive</button>
+    </div>
+    <figcaption>
+      <span class="plate-title">Bird Box</span>
+      Each circle is a species, built from the same four-ring anatomy and colored from its plumage; click a bird and its recorded song plays while the rings respond to the sound. Built in p5.js.
+      <a class="live-open" target="_blank" rel="noopener">Open full size &nearr;</a>
+      <span class="print-url">Interactive in the online edition.</span>
+    </figcaption>
+  </figure>
+  </div>
+</section>
+
+<section class="plate-page new-page">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:2.361"><img src="assets/portfolio/seeing-bird-songs/fig7_diagram-01.jpg" alt="Diagram showing bird song and color moving from perceptual object through sensory channel to memory"></figure>
+      <figure class="fig fig--text" style="--r:2.599"><img src="assets/portfolio/seeing-bird-songs/cardinal-spectrogram.jpg" alt="Spectrogram of a Northern Cardinal song: two bands of repeated, downward-sweeping notes"></figure>
+      <figure class="fig fig--text" style="--r:1.215"><img src="assets/portfolio/seeing-bird-songs/bird-songs-species-key.jpg" alt="Species-to-visual-key translation for six regional birds"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Perceptual translation framework</span>The conceptual diagram behind Seeing Bird Songs: bird song and color as perceptual objects, translated through a sensory channel into memory.</li>
+        <li><span class="plate-title">Spectrogram of a Northern Cardinal&rsquo;s song</span>A Northern Cardinal&rsquo;s song as a spectrogram: a repeated series of downward-sweeping notes across two pitch bands.</li>
+        <li><span class="plate-title">Species-to-visual key</span>Translation key for six regional birds &mdash; Blue Jay, Red-Bellied Woodpecker, Song Sparrow, American Robin, European Starling, and Northern Cardinal.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.990"><img src="assets/portfolio/seeing-bird-songs/bird-songs-fig11-02.jpg" alt="Anatomical ring mapping used to structure the Seeing Bird Songs visual system"></figure>
+      <figure class="fig fig--text" style="--r:2.273"><img src="assets/portfolio/seeing-bird-songs/cardinal-scale.jpg" alt="The Northern Cardinal visual shown at three sizes: concentric rings in brown, red, near-black, and red, growing from small to large"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Anatomical ring mapping</span>Beak, head, belly, and wings mapped as concentric rings, shown in outline and color-coded form &mdash; the structural system underlying each species key.</li>
+        <li><span class="plate-title">Cardinal, at three scales</span>The Northern Cardinal&rsquo;s visual at three sizes, the same four rings growing outward [add what the scale encodes, such as volume or duration].</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:0.750"><img src="assets/portfolio/seeing-bird-songs/testing-session-2.jpg" alt="Several people talking outdoors on a lawn beside a slate path, one holding a camera, with others seated nearby"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Testing session, in conversation</span>Participants and facilitators talking during a testing session [add location and date].</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/seeing-bird-songs/testing-session-1.jpg" alt="A group of people gathered outdoors on a lawn beside a slate path, some seated in camp chairs and some in wheelchairs or mobility scooters, several holding binoculars, with a spotting scope on a tripod"></figure>
+      <figure class="fig fig--text" style="--r:0.750"><img src="assets/portfolio/seeing-bird-songs/testing-session-2.jpg" alt="Several people talking outdoors on a lawn beside a slate path, one holding a camera, with others seated nearby"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Community testing session</span>A testing session with a regional birding group, outdoors in a park [add location and date].</li>
+        <li><span class="plate-title">Testing session, in conversation</span>Participants and facilitators talking during a testing session [add location and date].</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--medium" style="--r:0.750"><img src="assets/portfolio/seeing-bird-songs/testing-binoculars.jpg" alt="A person with short gray hair and a blue fleece, seen from the side, looking through binoculars against a blue sky and green shrubs"></figure>
+      <figure class="fig fig--medium" style="--r:0.750"><img src="assets/portfolio/seeing-bird-songs/trail-marker.jpg" alt="A brown wooden trail marker post with a blue square showing a bird perched on binoculars, and a brown and white directional arrow below it, against blurred green foliage"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Birding in the field</span>A birder with binoculars [confirm the context of this photo].</li>
+        <li><span class="plate-title">Birding trail marker</span>A trail marker with a bird-and-binoculars symbol and a directional arrow [add location].</li>
+      </ol>
+    </div>
+</section>
+
+<!-- c. Energy Bodies -->
+
+<section class="new-page">
+  <div class="content">
+    <p class="project-meta"><span class="tag">Juried &middot; International</span> 2025&ndash;2026</p>
+    <h3 class="subproject" id="energy-bodies"><span class="head-num">c.</span>Energy Bodies</h3>
+    <p>Developed with expressive arts therapist Carrie Powell, <em>Energy Bodies</em> is an interactive motion-capture installation that translates emotion, movement quality, spatial orientation, and body shape into a computational visual system grounded in somatic design theory. The work was selected for Information+ 2025 at the MIT Media Lab, on view from November 2025 through January 2026.</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><img src="assets/portfolio/energy-bodies/01-installation-view.jpg" alt="Energy Bodies installed at Information+ 2025: a portrait display showing a colorful abstract human figure with a camera on top, an iPad on a floor stand to its left, and a red wall panel on a stand to its right, in front of the Information+ wall graphics"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Installation view</span><em>Energy Bodies</em> at Information+ 2025, MIT Media Lab: a portrait display with a camera for body tracking, an iPad stand for adjusting the visualization, and the project panel with printed session snapshots.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.278"><img src="assets/portfolio/energy-bodies/02-exhibition-plan.jpg" alt="Scale elevation drawing of the Energy Bodies installation on a nine-foot wall: wall panel, iPad on a stand, portrait display with camera, printer shelf, and a standing figure for scale, with heights dimensioned"></figure>
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/energy-bodies/04-visitor-with-installation.jpg" alt="A visitor in a knit hat looking at the Energy Bodies display, with the red project panel and a small shelf of printed snapshots to the right"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Exhibition plan</span>The installation drawn to scale for the exhibition proposal (August 2025): display, camera, iPad, printer shelf, and wall panel placed for a standing visitor. <a class="live-open" href="assets/portfolio/energy-bodies/exhibition-plan.pdf" target="_blank" rel="noopener">Full plan with hardware and budget (PDF) &nearr;</a></li>
+        <li><span class="plate-title">Visitor with the installation</span>A visitor at the display, with the project panel and the shelf of printed session snapshots beside it.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/energy-bodies/05-information-plus-entrance.jpg" alt="The Information+ entrance in a bright atrium: large turquoise 3D letters reading INFO PLUS with scattered lilac and turquoise triangles, an orange introductory panel, and the Energy Bodies display with its camera in the foreground"></figure>
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/energy-bodies/06-exhibition-space.jpg" alt="Wide view of the Information+ exhibition space: a curved planted bed with screens on stands around it, the INFO PLUS wall graphics, and the Energy Bodies display against the wall on the right"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Information+ entrance</span>The entrance to Information+ 2025, the juried international exhibition within the Information+ conference. <em>Energy Bodies</em> stands beside the exhibition&rsquo;s title wall and introductory panel.</li>
+        <li><span class="plate-title">The exhibition space</span><em>Energy Bodies</em> (right of center) in the wider Information+ 2025 installation, among the other selected works.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.778"><img src="assets/portfolio/energy-bodies/07-visitor-watching.jpg" alt="A visitor in a tan coat and light scarf looking intently toward the installation, with other visitors behind in a glass-walled lobby"></figure>
+      <figure class="fig fig--text" style="--r:1.778"><img src="assets/portfolio/energy-bodies/09-exhibition-visitors.jpg" alt="Overhead view of a crowded lobby during Information+ 2025, with visitors standing around screens on stands and a planted bed"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Audience</span>A visitor engaging with the work, one of many attendees in the lobby during Information+ 2025.</li>
+        <li><span class="plate-title">Information+ 2025 visitors</span>Visitors filling the exhibition space during an Information+ 2025 event.</li>
+      </ol>
+    </div>
+</section>
+
+<!-- d. Moonflower -->
+
+<section class="new-page">
+  <div class="content">
+    <p class="project-meta"><span class="tag">[validation]</span> [year]</p>
+    <h3 class="subproject" id="moonflower"><span class="head-num">d.</span>Moonflower</h3>
+    <p><em>Moonflower</em> is a kaleidoscope that takes its form from the Moon. The current phase, distance, and angle, calculated for the viewer&rsquo;s location, shape the pattern, which can be adjusted with sliders or set in motion. [Add where it has been shown and what it is for.]</p>
+  </div>
+</section>
+
+<section class="plate-page plate-page--live new-page">
+  <div class="plate-figs">
+    <figure class="plate plate--live" data-embed="projects/moonflower/index.html" data-embed-css="#canvas-container{min-width:0;overflow:hidden} #canvas-container canvas{max-width:100%!important;height:auto!important}">
+    <div class="live-frame" style="--poster-r:1.488">
+      <img src="assets/portfolio/moonflower/poster.jpg" alt="Moonflower: a dark interface with the current moon phase, illumination, distance and observer location listed on the left with sliders for the kaleidoscope's parameters, and a white kaleidoscope pattern of crescent shapes on a black field to the right">
+      <button type="button" class="live-launch">Launch interactive</button>
+    </div>
+    <figcaption>
+      <span class="plate-title">Moonflower</span>
+      A kaleidoscope drawn from the Moon: the current phase, distance, and angle, calculated for the viewer&rsquo;s location, shape the pattern, which can be adjusted with sliders or set in motion. Allow location access for the angle from your own position. Built in p5.js.
+      <a class="live-open" target="_blank" rel="noopener">Open full size &nearr;</a>
+      <span class="print-url">Interactive in the online edition.</span>
+    </figcaption>
+  </figure>
+  </div>
+</section>
+
+<!-- 2. AACSRE Emerging Fellowship (not in the outline you gave — kept here as a Research project; move or cut as you like) -->
+
+<section class="new-page project-start">
+  <div class="content">
+    <p class="project-meta"><span class="tag">Funded</span> 2026&ndash;2027</p>
+    <h2 class="project-title" id="aacsre-fellowship"><span class="head-num">2.</span>AACSRE Emerging Fellowship</h2>
+    <p>The fellowship funds the development of responsive, multisensory smart signage systems that translate real-time ecological and environmental data into urban experience &mdash; extending the sensory and perceptual methods at the center of this body of work into public space.</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Project summary visual]</span>[Add a concept image or diagram for the fellowship project here. The award letter itself belongs in the Evidence Appendix.]</li>
+      </ol>
+    </div>
+</section>
+
+<!-- II. PROFESSIONAL WORK -->
+
+<section class="new-page group-start divider divider--group" style="--eb-l:100%;--ebh-l:6px;--eb-r:100%;--ebh-r:1px;--tb-col:0;--tb-len:4;--tb-h:6px;--eyl-row:1;--eyr-row:7;--t-row:4;--nav-row:9">
+  <p class="cover-eyebrow cover-col-body">Portfolio &middot; II</p>
+  <p class="cover-eyebrow cover-col-right">Research &amp; Creative<br>Practice Portfolio</p>
+  <h2 class="divider-title" id="portfolio-professional"><span class="divider-line c1">PROFESSIONAL</span><span class="divider-line c4 leader">WORK</span></h2>
+  <nav class="cover-nav cover-col-right">
+    <a href="#decordova">deCordova<span class="toc-page" data-target="#decordova"></span></a>
+    <a href="#steegethomson">SteegeThomson<span class="toc-page" data-target="#steegethomson"></span></a>
+    <a href="#testing-wisely">Testing Wisely<span class="toc-page" data-target="#testing-wisely"></span></a>
+  </nav>
+</section>
+
+<!-- 1. deCordova -->
+
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><div class="plate-placeholder">[Add landing-page screenshot]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Project website</span><a class="site-url" href="https://www.gold-collective.com/" target="_blank" rel="noopener">[example.org] &nearr;</a></li>
+      </ol>
+    </div>
+</section>
+
+<section class="new-page project-start">
+  <div class="content">
+    <p class="project-meta"><span class="tag">Commissioned</span> [years]</p>
+    <h2 class="project-title" id="decordova"><span class="head-num">1.</span>deCordova Sculpture Park and Museum</h2>
+    <p>Through Gold Collective, I have designed for exhibitions at the deCordova Sculpture Park and Museum: exhibition wallpaper for <em>All the Marvelous Surfaces</em>, the identity and signage for <em>Nature Sanctuary</em>, and the printed map and guide for <em>Land Portal</em>. [Confirm or revise this overview.]</p>
+  </div>
+</section>
+
+<!-- a. All the Marvelous Surfaces -->
+
+<section class="new-page">
+  <div class="content">
+    <p class="project-meta"><span class="tag">[validation]</span> [year]</p>
+    <h3 class="subproject" id="marvelous-surfaces"><span class="head-num">a.</span>All the Marvelous Surfaces Exhibition Wallpaper</h3>
+    <p>[Describe the wallpaper design and your role.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Exhibition wallpaper]</span>[Add installation photography and a detail of the wallpaper here.]</li>
+      </ol>
+    </div>
+</section>
+
+<!-- b. Nature Sanctuary -->
+
+<section class="new-page">
+  <div class="content">
+    <h3 class="subproject" id="nature-sanctuary"><span class="head-num">b.</span>Nature Sanctuary Exhibition Identity and Signage</h3>
+    <p>Through Gold Collective, I designed the identity and signage for <em>Nature Sanctuary</em>, an exhibition at the deCordova Sculpture Park and Museum: the exhibition identity, the introductory and artist panels placed in the landscape, and banner concepts.</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.264"><img src="assets/portfolio/decordova/01-nature-sanctuary-identity.jpg" alt="Nature Sanctuary identity shown in three colorways: cream on dark green with a fern, dark green on lilac with a leaf drawing, and dark green on olive with a monstera leaf outline"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Nature Sanctuary identity</span>The exhibition&rsquo;s identity: a high-contrast serif wordmark paired with hand-drawn plant linework, shown in three colorways.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/decordova/02-intro-sign-installed.jpg" alt="The Nature Sanctuary introductory sign installed on the lawn at deCordova, with a glass sculpture and a greenhouse behind it"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Exhibition introduction sign</span>The exhibition&rsquo;s introductory panel on the Sculpture Park lawn, with a site map, a numbered artist list, and funder credits.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/decordova/03-ruttenberg-snail-and-sign.jpg" alt="Kathy Ruttenberg's large snail sculpture with a translucent shell, and its interpretive sign in the foreground"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Artwork sign in the landscape</span>An artist panel placed beside Kathy Ruttenberg&rsquo;s <em>A Snail&rsquo;s Pace</em>, so visitors read it with the work in view.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.500"><img src="assets/portfolio/decordova/04-banner-mockup.jpg" alt="Mockup of two vertical Nature Sanctuary banners on a city sidewalk, one dark green and one olive, listing the five artists and the dates 06.25 to 10.26"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Banner concept (mockup)</span>A mockup of the vertical banner system in a street setting &mdash; a concept visualization, not a photograph of an installation.</li>
+      </ol>
+    </div>
+</section>
+
+<!-- c. Land Portal Map -->
+
+<section class="new-page">
+  <div class="content">
+    <p class="project-meta"><span class="tag">[validation]</span> 2025</p>
+    <h3 class="subproject" id="land-portal"><span class="head-num">c.</span>Land Portal Map</h3>
+    <p>Through Gold Collective, I designed the printed walking tour guide for <em>Land Portal</em>, a walk through ecological space and time by Ellie Irons and Aubrie James: a land ecology piece at deCordova Sculpture Park and Museum, adjacent to the <em>Nature Sanctuary</em> exhibition. [Add anything specific about your role in the guide, such as design, typography, or production.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--medium" style="--r:0.750"><img src="assets/portfolio/land-portal/01-guide-cover.jpg" alt="A hand holding the folded Land Portal guide outdoors; the cover has a blue and chartreuse block-print of a sun over a rocky landscape, with the title Land Portal set in large blue type"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">The guide cover</span>The folded guide: a blue and chartreuse print of sun and landscape above the title, subtitle (&ldquo;a walk through ecological space and time&rdquo;), and artists&rsquo; names.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.129"><img src="assets/portfolio/land-portal/02-guide-laid-flat.jpg" alt="The Land Portal guide laid flat in two rows, showing the cover, the route map with labels such as pond, meadow, evergreen grove, wetlands, and detention basin, and seven numbered stops with illustrations"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">The route and seven stops</span>The guide laid flat: a map of the walk and seven numbered stops, from &ldquo;Living Crystals and the Great Acceleration&rdquo; to &ldquo;You Were the Center of a Mountain.&rdquo;</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/land-portal/03-map-in-use.jpg" alt="A visitor holding the open guide on a lawn, showing the chartreuse route map with the walk traced in blue and areas labeled pond, meadow, evergreen grove, leach field, wetlands, detention basin, south lawn, and water treatment plant"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">The map in use</span>The route map, opened on the grounds at deCordova.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/land-portal/04-marker-5.jpg" alt="A chartreuse wooden marker post with a blue numeral 5 and the words Land Portal; a QR code is on its side, and a person leans against a large tree in the background"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Stop marker 5</span>A numbered marker post in the landscape: the stop number and project name on the front face, a QR code on the side.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/land-portal/05-marker-8.jpg" alt="A chartreuse marker post with a blue numeral 8 and the words Land Portal, standing among rhododendron shrubs in front of a brick wall"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Stop marker 8</span>Marker 8, among rhododendrons beside a brick building.</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><img src="assets/portfolio/land-portal/06-entering-the-portal.jpg" alt="Close view of the open guide: a blue and chartreuse halftone image behind a large numeral 7 on the left, and on the right a circular opening through which sky and clouds are visible, with the heading Becoming the Portal and body text"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Entering the portal</span>Spread from the guide: a circular opening in the page frames the sky, beside the &ldquo;Becoming the Portal&rdquo; text and a two-color halftone landscape for stop 7.</li>
+      </ol>
+    </div>
+</section>
+
+<!-- 2. SteegeThomson -->
+
+<section class="new-page project-start">
+  <div class="content">
+    <p class="project-meta"><span class="tag">[validation]</span> [years]</p>
+    <h2 class="project-title" id="steegethomson"><span class="head-num">2.</span>SteegeThomson</h2>
+    <p>[Describe SteegeThomson and your role.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--text" style="--r:1.333"><div class="plate-placeholder">[Add landing-page screenshot]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Project website</span><a class="site-url" href="https://example.org" target="_blank" rel="noopener">[example.org] &nearr;</a></li>
+      </ol>
+    </div>
+</section>
+
+<!-- a. Rebrand -->
+
+<section class="new-page">
+  <div class="content">
+    <h3 class="subproject" id="steege-rebrand"><span class="head-num">a.</span>Rebrand</h3>
+    <p>[Describe the rebrand: the problem, your approach, and the outcome.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Rebrand]</span>[Add identity, system, and application images here.]</li>
+      </ol>
+    </div>
+</section>
+
+<!-- 3. Testing Wisely -->
+
+<section class="new-page project-start">
+  <div class="content">
+    <p class="project-meta"><span class="tag">Funded &mdash; NIH</span> [years]</p>
+    <h2 class="project-title" id="testing-wisely"><span class="head-num">3.</span>Testing Wisely</h2>
+    <p>Led by Dr. Daniel Morgan of the University of Maryland, Testing Wisely is an NIH-funded initiative to improve clinical testing decisions. I led the creative direction of a suite of teaching animations, an educational game, and a disease-risk calculator, along with a decision map that helps practitioners judge the likelihood of a true or false result.</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add landing-page screenshot]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Project website</span><a class="site-url" href="https://example.org" target="_blank" rel="noopener">[example.org] &nearr;</a></li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Teaching animation, still]</span>[Add a still frame from one of the teaching animations here.]</li>
+      </ol>
+    </div>
+</section>
+
+<!-- a. Decision Maps and Testing Calculators -->
+
+<section class="new-page">
+  <div class="content">
+    <h3 class="subproject" id="decision-maps"><span class="head-num">a.</span>Decision Maps and Testing Calculators</h3>
+    <p>[Describe the decision maps and calculators: who they are for and how they are used.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Decision map]</span>[Add the decision-map graphic here.]</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Testing calculator / game]</span>[Add screens from the calculator or educational game here.]</li>
+      </ol>
+    </div>
+</section>
+
+<!-- III. COLLABORATIVE PROJECTS -->
+
+<section class="new-page group-start divider divider--group" style="--eb-l:7rem;--ebh-l:6px;--eb-r:4.5rem;--ebh-r:6px;--tb-col:3;--tb-len:2;--tb-h:6px;--eyl-row:3;--eyr-row:2;--t-row:6;--nav-row:10">
+  <p class="cover-eyebrow cover-col-body">Portfolio &middot; III</p>
+  <p class="cover-eyebrow cover-col-right">Research &amp; Creative<br>Practice Portfolio</p>
+  <h2 class="divider-title" id="portfolio-collaborative"><span class="divider-line c1">COLLABORATIVE</span><span class="divider-line c4">PROJECTS</span></h2>
+  <nav class="cover-nav cover-col-right">
+    <a href="#intersections">Intersections<span class="toc-page" data-target="#intersections"></span></a>
+    <a href="#harm-reduction">Harm Reduction<span class="toc-page" data-target="#harm-reduction"></span></a>
+  </nav>
+</section>
+
+<!-- 1. Intersections -->
+
+<section class="new-page project-start">
+  <div class="content">
+    <p class="project-meta"><span class="tag">Invited &middot; International</span> 2025</p>
+    <h2 class="project-title" id="intersections"><span class="head-num">1.</span>Intersections: Health, Environment &amp; Design</h2>
+    <p>Presented at the Venice Architecture Biennale, <em>Intersections</em> paired exhibition components with an international panel on environmental data and urban health that I moderated, in collaboration with architecture faculty and students. Components were installed in Venice and later reinstalled at the Center for Architecture and Design for DesignPhiladelphia 2025.</p>
+  </div>
+</section>
+
+<section class="new-page">
+  <div class="content">
+    <h3 class="subproject" id="biennale"><span class="head-num">a.</span>Biennale Exhibition Creative Direction</h3>
+    <p>[Describe your creative direction of the exhibition components: concept, design, and installation in Venice and at DesignPhiladelphia.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Exhibition component, Venice]</span>[Add installation photography from the Venice Architecture Biennale here.]</li>
+      </ol>
+    </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Exhibition component, DesignPhiladelphia]</span>[Add photography from the Center for Architecture and Design reinstallation here.]</li>
+      </ol>
+    </div>
+</section>
+
+<!-- b. Symposium -->
+
+<section class="new-page">
+  <div class="content">
+    <h3 class="subproject" id="symposium"><span class="head-num">b.</span>Symposium</h3>
+    <p>[Describe the symposium and the panel on environmental data and urban health that you moderated.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Panel documentation]</span>[Add a photo from the panel you moderated here.]</li>
+      </ol>
+    </div>
+</section>
+
+<!-- 2. Harm Reduction -->
+
+<section class="new-page project-start">
+  <div class="content">
+    <p class="project-meta"><span class="tag">Accepted for Publication</span> [year]</p>
+    <h2 class="project-title" id="harm-reduction"><span class="head-num">2.</span>Harm Reduction Research</h2>
+    <p>With Dr. Greg Jaffe of Sidney Kimmel Medical College, I have applied design methods to harm reduction and stigma reduction. This work produced a co-authored paper, now accepted for publication in [journal], examining a designed harm-reduction intervention developed with students and installed in a fashion pop-up setting. The project also informed a 2025 submission to the Smart &amp; Healthy Cities initiative with Nioka Wyatt of Fashion Merchandising.</p>
+  </div>
+</section>
+
+<!-- a. Sticker Project -->
+
+<section class="new-page">
+  <div class="content">
+    <h3 class="subproject" id="sticker-project"><span class="head-num">a.</span>Sticker Project</h3>
+    <p>[Describe the sticker project.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig fig--medium" style="--r:0.750"><img src="assets/portfolio/harm-reduction/buttons.jpg" alt="A scatter of round buttons on a black cutting mat: pink buttons with a purple cat reading Break the Stigma, green buttons with a nasal spray device reading I Keep That Thang On Me, blue buttons with a green alien reading Zap Stigma, purple Break the Stigma buttons, green smiley buttons, and Test Your Drugs buttons with pink dots"></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">Buttons</span>Button designs from the harm-reduction work: Break the Stigma, Test Your Drugs!, I Keep That Thang On Me (with a Narcan nasal spray), Zap Stigma, and Smiles Zap Stigma [confirm how they were made and used].</li>
+      </ol>
+    </div>
+</section>
+
+<!-- b. Pop-up Shop Booth -->
+
+<section class="new-page">
+  <div class="content">
+    <h3 class="subproject" id="popup-booth"><span class="head-num">b.</span>Pop-up Shop Booth</h3>
+    <p>[Describe the designed booth and the pop-up setting.]</p>
+  </div>
+</section>
+
+<section class="plate-page new-page plate-page--single">
+    <div class="plate-figs">
+      <figure class="fig" style="--r:1.333"><div class="plate-placeholder">[Add image]</div></figure>
+    </div>
+    <div class="plate-captions">
+      <ol>
+        <li><span class="plate-title">[Intervention documentation]</span>[Add photography of the designed harm-reduction intervention / fashion pop-up installation here. The acceptance letter itself belongs in the Evidence Appendix.]</li>
+      </ol>
+    </div>
+</section>
+
+<!-- Contributions to the Profession (text list, no images) -->
+
+<section class="new-page">
+  <div class="content">
+    <h2 id="contributions">Contributions to the Profession</h2>
+    <ul class="text-list">
+      <li>Peer reviewer, <em>Journal of Communication in Healthcare</em></li>
+      <li>Manuscript reviewer, Bloomsbury Publishing</li>
+      <li>Paper reviewer, AIGA Design Educators Community conference</li>
+      <li>Invited speaker, AIGA National Conference Design Educators Symposia</li>
+      <li>Keynote, Method Madness, Phoenix Design Week</li>
+      <li>Guest juror, <em>Revealed</em> exhibition, University of Delaware</li>
+      <li>Education Chair and Board Member, AIGA Philadelphia (including transforming the 25-year-running regional portfolio review into a virtual conference)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Evidence Appendix -->
+
+<section class="new-page">
+  <div class="content">
+    <h2 id="evidence-appendix">Evidence Appendix</h2>
+    <p>Supporting documentation for the recognition and funding referenced throughout this portfolio. Replace each placeholder box with a scan (drop the image inside the <code>.evidence-thumb</code> div in place of the placeholder text).</p>
+    <div class="evidence-grid">
+      <div class="evidence-item">
+        <div class="evidence-thumb">[Acceptance letter &mdash; Harm Reduction paper]</div>
+        <p class="evidence-label">Acceptance letter, harm-reduction paper</p>
+      </div>
+      <div class="evidence-item">
+        <div class="evidence-thumb">[SEED Grant award letter, 2023]</div>
+        <p class="evidence-label">SEED Grant award letter (2023)</p>
+      </div>
+      <div class="evidence-item">
+        <div class="evidence-thumb">[AACSRE Fellowship award letter]</div>
+        <p class="evidence-label">AACSRE Emerging Fellowship award letter</p>
+      </div>
+      <div class="evidence-item">
+        <div class="evidence-thumb">[GDUSA recognition, 2022]</div>
+        <p class="evidence-label">GDUSA &ldquo;Responsible Design to Watch&rdquo; (2022)</p>
+      </div>
+      <div class="evidence-item">
+        <div class="evidence-thumb">[Information+ 2025 juried acceptance / CFE]</div>
+        <p class="evidence-label">Information+ 2025 juried acceptance</p>
+      </div>
+      <div class="evidence-item">
+        <div class="evidence-thumb">[Nightingale Magazine table of contents]</div>
+        <p class="evidence-label">Nightingale Magazine, Nature issue &mdash; table of contents</p>
+      </div>
+      <div class="evidence-item">
+        <div class="evidence-thumb">[Venice Biennale / Intersections program]</div>
+        <p class="evidence-label">Venice Architecture Biennale &mdash; program documentation</p>
+      </div>
+    </div>
+  </div>
+</section>
+

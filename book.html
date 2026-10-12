@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renée Walker — Promotion Dossier</title>
+
+<!-- For the static nav bar only — Paged.js applies tokens/fonts/base/book
+     to the paginated content itself via the Previewer call in
+     assemble-book.js, separately from this normal <link> loading. -->
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/nav.css">
+
+<script>window.PagedConfig = { auto: false };</script>
+<script src="https://cdn.jsdelivr.net/npm/pagedjs/dist/paged.polyfill.js"></script>
+</head>
+<body>
+
+<header class="site-nav">
+  <a class="site-nav-name" href="index.html">&larr; Renée Walker</a>
+  <nav>
+    <a href="index.html">Back to site</a>
+    <button type="button" id="print-btn">Print / Save as PDF</button>
+  </nav>
+</header>
+
+<div id="paged-target">
+  <p id="loading" style="font-family: sans-serif; padding: 2rem; color: #4B4E44;">Assembling and paginating the dossier&hellip;</p>
+</div>
+
+<script type="module" src="js/assemble-book.js"></script>
+</body>
+</html>

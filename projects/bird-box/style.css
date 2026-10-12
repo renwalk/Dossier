@@ -1,0 +1,200 @@
+/****************************************************************************** ✨ FONTS ******************************************************************************/
+@font-face {
+    font-family: "Reckham No1 Light";
+    src: url("Reckham No1 Light/Reckham-No1Light-v4.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+/****************************************************************************** ✨ GLOBAL STYLES ******************************************************************************/
+/* CSS Variables */
+:root {
+    --color-bg: #dbd7ce;
+    --color-text-main: #000000;
+    --color-primary: #000000;
+    --wrapper-height: 20vh;
+    --image-max-width: 600px;
+    --image-margin: 3rem;
+    --font-family: "Reckham No1 Light";
+    --font-family-header: "Reckham No1 Light";
+}
+
+/* Reset & Global Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    font-weight: 300;
+    font-style: normal;
+    background-color: var(--color-bg);
+    overflow-x: hidden; /* prevent horizontal scrollbar but allow svg bleed */
+}
+
+/* Remove any elements marked as hidden */
+[hidden] {
+    display: none !important;
+}
+
+/****************************************************************************** ✨ LAYOUT STYLES ******************************************************************************/
+/* Two-column page layout: sidebar | canvas */
+.wrapper {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    align-items: start;
+    max-width: 1440px;
+    margin: 1rem auto;
+    padding: 0 50px;
+    gap: 0;
+    overflow: visible;
+}
+
+/* Sidebar: title + bird list */
+.sidebar {
+    padding-top: 80px;
+    padding-right: 20px;
+    overflow: visible;
+}
+
+#p5-wrapper {
+    width: 100%;
+    position: relative;
+    overflow: visible;
+    padding-left: 30px;
+}
+
+#p5-container {
+    width: 100%;
+}
+
+/****************************************************************************** ✨ TITLE & HEADER ******************************************************************************/
+h1 {
+    color: #1a1816;
+    font-size: 46px;
+    margin: 0 0 20px 0;
+    line-height: 105%;
+}
+
+h2 {
+    color: #1a1816;
+    font-size: 18px;
+    margin: 0 0 24px 0;
+}
+
+/****************************************************************************** ✨ BIRD KEY ******************************************************************************/
+.bird-key {
+    display: block;
+    margin-bottom: 20px;
+    overflow: visible;
+}
+
+/****************************************************************************** ✨ BIRD LIST ******************************************************************************/
+.bird-list {
+    text-align: left;
+    font-family: var(--font-family-header), serif;
+    font-weight: 300;
+    font-size: .95rem;
+    font-variant: small-caps;
+}
+
+/****************************************************************************** ✨ LAYOUT STYLES ******************************************************************************/
+/* Style for text below the p5.js sketch */
+.bird-description {
+    text-align: left;
+    /* Centers text */
+    font-size: 1rem;
+    /* Adjust font size */
+    margin-top: 20px;
+    /* Adds space above */
+    max-width: 800px;
+    /* Prevents text from stretching too wide */
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+    /* Improves readability */
+}
+
+/****************************************************************************** ✨ BIRD LIST LINK STYLES ******************************************************************************/
+.bird-list a {
+    text-decoration: none;
+    color: #1a1816;
+    font-weight: 500;
+    padding-bottom: 2px;
+    position: relative;
+    display: block;
+    width: 100%;
+    line-height: 1.25;
+
+}
+
+/* Underline effect */
+.bird-list a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-primary);
+    transform: scaleX(0);
+    /* Initially hidden */
+}
+
+/* Show underline when hovered, clicked, or focused */
+.bird-list a:hover::after,
+.bird-list a:focus::after,
+.bird-list a.active::after {
+    transform: scaleX(1);
+    /* Make underline visible */
+}
+
+/****************************************************************************** ✨ RESPONSIVE DESIGN ******************************************************************************/
+@media (max-width: 700px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        padding-right: 6 0;
+        padding-bottom: 24px;
+    }
+}
+
+/****************************************************************************** ✨ FOOTER STYLES ******************************************************************************/
+.footer {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem auto 0;
+    padding: 1rem 0 0.75rem 0;
+    width: 100%;
+    flex-wrap: wrap;
+    border-top: 4px solid #fff;
+}
+
+/* Footer links */
+.footer a:not(.btn--remix):link,
+.footer a:not(.btn--remix):visited {
+    font-family: HK Grotesk;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.1rem;
+    color: #000;
+    text-decoration: none;
+    border-style: none;
+}
+
+.footer a:hover {
+    background: var(--color-primary);
+}
+
+
+
+/****************************************************************************** ✨ OPTIONAL: SWAP BIRD LIST & KEY DYNAMICALLY ******************************************************************************/
+.swapped .bird-list {
+    grid-column: 3;
+}
+
+.swapped .key-container {
+    grid-column: 2;
+}
