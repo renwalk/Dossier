@@ -1,0 +1,34 @@
+{
+  "_help": "Images for the pages the book leaves blank (from the CV onward). 'pages' maps a blank page's label to its image; any blank page not listed picks from 'default'. Labels: after:<id> is the blank page right after the part/section with that id, before:<id> the one right before it. Open book.html and look in the browser console: each blank page logs its label. Per-page options: image (path, or \"none\" to leave it blank), zoom (percent, bigger = tighter crop, e.g. 400), x and y (0-100, which part of the image sits on the page). Only image is required.",
+  "default": [
+    "assets/portfolio/energy-bodies/Energy-Bodies-1.jpg",
+    "assets/portfolio/energy-bodies/Energy-Bodies-2.jpg",
+    "assets/portfolio/energy-bodies/Energy-Bodies-3.jpg",
+    "assets/portfolio/energy-bodies/Energy-Bodies-4.jpg",
+    "assets/portfolio/moonflower/04-moonflower-bud.jpg",
+    "assets/portfolio/moonflower/06-moonflower-bloom.jpg",
+    "assets/portfolio/moonflower/07-moonflower-unfurling.jpg",
+    "assets/portfolio/seeing-bird-songs/species-visuals.jpg",
+    "assets/portfolio/seeing-bird-songs/cardinal-spectrogram.jpg"
+  ],
+  "pages": {
+    "before:toc": {
+      "image": "assets/portfolio/moonflower/07-moonflower-unfurling.jpg",
+      "zoom": 450,
+      "x": 50,
+      "y": 40
+    },
+    "after:cv": {
+      "image": "assets/portfolio/energy-bodies/Energy-Bodies-2.jpg",
+      "zoom": 420,
+      "x": 40,
+      "y": 30
+    },
+    "before:cv": {
+      "image": "assets/portfolio/energy-bodies/Energy-Bodies-1.jpg",
+      "zoom": 450,
+      "x": 40,
+      "y": 55
+    }
+  }
+}

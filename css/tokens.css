@@ -3,7 +3,7 @@
    Pulled out of the old single-file draft so every section
    (cv / intro / research / portfolio) and the pagination layer share it. */
 :root{
-  --paper: #F7F4EE;
+  --paper: #ffffff;
   --ink: #1E2019;
   --ink-soft: #4B4E44;
   --accent: #a3a3a3;      /* deep teal-green — ecological/data work */

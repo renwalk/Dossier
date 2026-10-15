@@ -9,6 +9,7 @@
 // then open http://localhost:8080/book.html
 
 import { numberFigures } from './number-figures.js';
+import { stackNotes } from './stack-notes.js';
 
 const SECTIONS = [
   'sections/00-cover.html',
@@ -45,6 +46,8 @@ async function assemble() {
   const flow = await window.PagedPolyfill.preview(content, STYLESHEETS, target);
   console.log(`Rendered ${flow.total} pages.`);
   fillTocPageNumbers();
+  await textureBlankPages();
+  stackNotes();
   wirePrintButton();
 }
 
@@ -62,6 +65,11 @@ function printUrlsForLivePlates(html) {
     if (url && line) line.textContent = 'Interactive version: ' + url.replace(/^https?:\/\//, '').replace(/\/$/, '');
   });
   numberFigures(tpl.content);
+  // Animated GIFs print as a still: the poster named in data-print-src.
+  tpl.content.querySelectorAll('img[data-print-src]').forEach((img) => {
+    img.src = img.dataset.printSrc;
+    img.removeAttribute('data-print-src');
+  });
   // Videos can't play on paper: print the poster frame instead (the caption
   // swaps its "Play with sound." for "Video in the online edition.").
   tpl.content.querySelectorAll('video[poster]').forEach((v) => {
@@ -96,6 +104,72 @@ function fillTocPageNumbers() {
     const target = document.querySelector(`.pagedjs_pages #${CSS.escape(id)}`);
     const page = target?.closest('.pagedjs_page');
     if (page) span.textContent = page.dataset.pageNumber;
+  });
+}
+
+// Pages Paged.js adds only to keep Parts and openers on right-hand pages come
+// out blank. From the CV onward, fill each with a tightly cropped, abstracted
+// image so they read as texture. Which image goes where is set in
+// book-textures.json (a blank page is named by its neighbour, e.g. "after:cv");
+// pages not listed there pick from its "default" pool, seeded by page number so
+// a rebuild gives the same result.
+function seeded(n) {
+  let t = (n * 2654435761) >>> 0;
+  return () => {
+    t = (t + 0x6d2b79f5) >>> 0;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+async function loadTextureConfig() {
+  try {
+    const res = await fetch('book-textures.json', { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) { /* fall through */ }
+  console.warn('book-textures.json missing or unreadable; blank pages left plain.');
+  return { default: [], pages: {} };
+}
+
+// Name a blank page by what it sits next to: before:<id of the first element with an
+// id on the next page>, else after:<id of the last one on the previous page>.
+function blankPageLabel(pages, i) {
+  const next = pages[i + 1]?.querySelector('[id]')?.id;
+  if (next) return `before:${next}`;
+  const prev = [...(pages[i - 1]?.querySelectorAll('[id]') || [])].pop()?.id;
+  return prev ? `after:${prev}` : `page:${pages[i].dataset.pageNumber}`;
+}
+
+async function textureBlankPages() {
+  const cfg = await loadTextureConfig();
+  const pool = cfg.default || [];
+  const chosen = cfg.pages || {};
+  const pages = [...document.querySelectorAll('.pagedjs_pages .pagedjs_page')];
+  const cvPage = document.querySelector('.pagedjs_pages #cv')?.closest('.pagedjs_page');
+  const from = cvPage ? Number(cvPage.dataset.pageNumber) : Infinity;
+  pages.forEach((page, i) => {
+    if (!page.classList.contains('pagedjs_blank_page')) return;
+    const n = Number(page.dataset.pageNumber);
+    const label = blankPageLabel(pages, i);
+    // before the CV only pages named in book-textures.json get an image
+    if (n < from && !chosen[label]) return;
+    const rand = seeded(n);
+    const set = chosen[label] || {};
+    const img = set.image || (pool.length ? pool[Math.floor(rand() * pool.length)] : null);
+    // draw the random numbers unconditionally so unset options stay stable
+    const zoom = set.zoom ?? Math.round(300 + rand() * 300);
+    const x = set.x ?? Math.round(rand() * 100);
+    const y = set.y ?? Math.round(rand() * 100);
+    console.log(`Blank page ${n} (${label}): ${img || 'plain'}`);
+    if (!img || img === 'none') return;
+    const tex = document.createElement('div');
+    tex.className = 'page-texture';
+    tex.setAttribute('aria-hidden', 'true');
+    tex.style.backgroundImage = `url("${img}")`;
+    tex.style.backgroundSize = `${zoom}%`;
+    tex.style.backgroundPosition = `${x}% ${y}%`;
+    (page.querySelector('.pagedjs_sheet') || page).prepend(tex);
   });
 }
 

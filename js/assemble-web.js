@@ -6,6 +6,7 @@
 // Requires being served over http(s) — see README.md.
 
 import { numberFigures } from './number-figures.js';
+import { watchNotes } from './stack-notes.js';
 
 const SECTIONS = [
   'sections/00-cover.html',
@@ -27,6 +28,7 @@ async function assemble() {
   );
   container.innerHTML = parts.join('\n');
   numberFigures(container);
+  watchNotes(container);
   revealNavPastCover();
   wireLiveEmbeds(container);
 }

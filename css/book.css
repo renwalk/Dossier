@@ -10,7 +10,7 @@
    too, not just at print time. */
 
 /* ---------- Trim size ----------
-   Standard ISO A4 — change PAGE_SIZE below if you want something else.
+   US Letter (8.5 x 11in) — change the size below if you want something else.
    This is deliberately NOT a pre-halved "booklet" trim like
    5.5in x 8.5in: this way the PDF this produces is an ordinary
    sequential document, which is exactly what
@@ -20,7 +20,7 @@
    itself, on a normal home/office printer — no special half-size
    paper stock and no professional bindery required. See README.md. */
 @page{
-  size: 210mm 297mm;
+  size: 8.5in 11in;
   margin-top: 1in;
   margin-bottom: 1in;
 }
@@ -66,6 +66,12 @@ section:not(.cover-page) .content{
 section:has(.cv-category) .content{
   grid-column: 3 / 10;
 }
+/* opener text starts at the left edge of the side-image column: the image width plus the gap
+   between that column and the text (see .margin-note below) */
+:root{ --note-w: 1.75in; }
+section:not(.cover-page) .lede{
+  margin-left: calc(0px - var(--note-w) - var(--cover-grid-gap));
+}
 section.part-start:has(.chapter-title#cv) .content{
   grid-column: 3 / 10;
 }
@@ -95,7 +101,14 @@ section.part-start:has(.chapter-title#cv) .content{
   grid-column: 2;
 }
 .margin-note.left,
-.margin-note.right{ grid-column: 1 / 3; }
+.margin-note.right{
+  grid-column: 1 / 3;
+  /* wider than the two narrow grid columns: the note stays flush with the text gap and
+     grows leftward into the page margin (1.75in keeps it clear of the edge on both
+     left- and right-hand pages) */
+  width: var(--note-w);
+  justify-self: end;
+}
 .plate{
   grid-column: 3 / 10;
   justify-self: start;
@@ -106,11 +119,11 @@ section.part-start:has(.chapter-title#cv) .content{
 /* ---------- Plate pages ----------
    One .plate-page fills exactly one page body: images stacked at the top
    (to the page margins — the figs row cancels the grid's side padding),
-   captions pinned to the foot. Height = A4 height minus the @page top and
+   captions pinned to the foot. Height = Letter height minus the @page top and
    bottom margins (1in each) minus a little slack; change it if the page
    size or those margins change. */
 section.plate-page{
-  --body-h: calc(297mm - 2in - 0.2in);
+  --body-h: calc(11in - 2in - 0.2in);
   --hcap: 9in;
   height: var(--body-h);
   margin-bottom: 0;
@@ -153,6 +166,36 @@ section.plate-page--live{ grid-template-rows: minmax(0, 1fr); --hcap: 100%; }
   flex-direction: column;
   justify-content: space-between;
 }
+
+/* ---------- Facing pages and opener pages ----------
+   A project (or sub-project) opens on a right-hand page, so the image pages that
+   follow it come in left/right pairs: two images a page, captions at the foot of
+   each. An umbrella project that has sub-projects starts on the left instead, so
+   its first sub-project's opener faces it and the spreads still line up. */
+/* The opener holds the project's text and its first image, with the caption at
+   the foot of the page like every other image page. */
+section.opener-fig{
+  height: var(--body-h);
+  margin-bottom: 0;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  --hcap: 5in;
+  break-inside: avoid;
+}
+section.opener-fig .content{ grid-row: 1; }
+section.opener-fig .plate-figs{ grid-row: 2; align-self: start; }
+section.opener-fig .plate-captions{ grid-row: 4; align-self: end; margin-top: 0; }
+section.opener-fig .plate-captions li{ font-size: 8.5pt; line-height: 1.4; margin-bottom: 0.07in; }
+/* a live piece in the opener: its caption stays inside the frame, at the foot */
+section.opener-live{ grid-template-rows: auto minmax(0, 1fr); }
+section.opener-live .plate-figs{ grid-row: 2; align-self: stretch; display: flex; flex-direction: column; margin-top: 1.6rem; }
+section.opener-live .plate--live{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+/* two images a page: tools/layout_plates.py sets --hcap-book so both fit with their captions */
+section.plate-page--pair, section.plate-page--multi{ --hcap: var(--hcap-book, 3.6in); }
 
 /* Live plates: print can't run the embed, so the poster stands in and
    the URL (filled in from data-embed by js/assemble-book.js) prints under
@@ -198,7 +241,7 @@ section.plate-page--live{ grid-template-rows: minmax(0, 1fr); --hcap: 100%; }
    base.css's 17px body size is tuned for index.html's screen essay
    layout. Scale it down to a normal book point size instead. */
 body{
-  font-size: 11pt;
+  font-size: 10.5pt;
   line-height: 1.5em;
 }
 .cover-eyebrow{ font-size: 8pt; }
@@ -210,12 +253,23 @@ section h2.group-title{ font-size: 18pt; }
 section h3.subproject{ font-size: 11.5pt; }
 section h4.subproject{ font-size: 10.5pt; }
 .cv-category{ font-size: 11.5pt; }
+section h2 .num{
+  width: 0.95in;
+  margin-left: -1.1in;
+  font-size: 11.5pt;
+  line-height: calc(1.3 * 13pt);
+  top: 0.7px;
+}
+/* notes hang beside their text (see base.css); in the book they are --note-w wide */
+.content > .margin-note{ width: var(--note-w); margin: 0; }
+.content > .margin-note.below-head{ margin-top: calc(1.3 * 13pt + 0.4rem); }   /* just clears the numeral's line */
 .callout{ font-size: 10.5pt; }
+
 
 /* ---------- Divider pages ----------
    One full page body each (same height as a .plate-page), title block
    centred vertically like the cover, no running head or page number. */
-:root{ --body-h: calc(297mm - 2in - 0.2in); }
+:root{ --body-h: calc(11in - 2in - 0.2in); }
 @page divider{
   @top-center{ content: none; }
   @bottom-center{ content: none; }
@@ -352,3 +406,101 @@ p{ orphans: 3; widows: 3; }
    references, and a TOC is a forward reference to later content). */
 
 footer.colophon{ break-before: page; }
+
+/* Facing pages (kept last on purpose: Paged.js applies break rules in file order, so
+   these must come after .new-page above or they would be overridden by it). */
+section.spread-right{ break-before: recto; }
+/* opener pages (large lede text) always open on a right-hand page */
+section:has(.lede){ break-before: recto; }
+section.spread-left{ break-before: verso; }
+
+/* ---------- Fill the text width (single-image pages) ----------
+   fig--fill makes a tall image as wide as the text area; it is cropped top and bottom
+   to the page's image height rather than shrunk to fit. The web page is unaffected. */
+section.plate-page--single .fig.fig--fill{ width: 100%; }
+section.plate-page--single .fig.fig--fill img{
+  height: var(--hcap);
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+/* ---------- Evidence appendix: three across, landscape items two wide ---------- */
+.evidence-grid{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.28in 0.16in;
+}
+.evidence-item .evidence-label{ font-size: 7.5pt; }
+
+/* ---------- Running text sections (Part Three) ----------
+   section.flow follows the one before it on the same page, like the Introduction,
+   instead of starting a new page; only a modest gap separates them. */
+section.flow{ margin-bottom: 1.5rem; }
+section.run-on{ margin-bottom: 1.15rem; }
+/* the paragraph after the Introduction's opener starts the next page, so the opener stands alone */
+section.run-on .lede + p{ break-before: page; }
+
+/* Part Three, section I: each margin note sits beside its paragraph in the same grid row, so the
+   rows can break across pages with the text instead of being pinned to fixed rows. */
+section.flow .row-1, section.flow .row-2, section.flow .row-3{ grid-row: auto; }
+
+/* ---------- Texture on pages left blank by recto breaks ----------
+   Zoomed, grayscale crop of a project image, tinted with the accent colour and
+   overlaid with a fine line screen (see textureBlankPages in assemble-book.js). */
+.page-texture{
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: #fff;
+  filter: grayscale(1) contrast(0.9) brightness(1.15);
+  opacity: 0.55;
+}
+.page-texture::after{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.45) 0 0.5px, transparent 0.5px 2.5px);
+}
+
+/* ---------- Contents page ----------
+   A divider-style page: the title steps in from column 2 and ends in a hairline, and
+   each entry sits on its own grid columns and rows (set in the section's markup),
+   with a big Tiempos Fine page number beside the name. */
+section.toc-front .divider-title{ grid-row: 2 / span 2; }
+section.toc-front .divider-title::after{ display: none; }   /* no bar under the title */
+.toc-entry{
+  grid-column: var(--c1) / var(--c2);
+  grid-row: var(--r) / span 2;
+  align-self: start;
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.18in;
+  padding-top: 1.3rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+.toc-entry::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--bw);
+  height: var(--bh);
+  background: var(--ink);
+}
+.toc-entry .toc-page{
+  flex: none;
+  font-family: var(--serif-display);
+  font-style: normal;
+  font-size: 64pt;
+  line-height: 0.85;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.toc-entry .toc-main{
+  font-family: var(--serif-display);
+  font-weight: 400;
+  font-size: 16pt;
+  line-height: 1.3;
+  letter-spacing: 0.005em;
+}

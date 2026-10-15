@@ -1,25 +1,26 @@
-<section class="part-start" id="toc">
-  <div class="content">
-    <h1 class="chapter-title">Contents</h1>
-    <nav class="toc">
-      <ol>
-        <li>
-          <span class="toc-page" data-target="#cv"></span>
-          <span class="toc-main"><a href="#cv">Curriculum Vitae</a></span>
-        </li>
-        <li>
-          <span class="toc-page" data-target="#intro"></span>
-          <span class="toc-main"><a href="#intro">Introduction</a></span>
-        </li>
-        <li>
-          <span class="toc-page" data-target="#research"></span>
-          <span class="toc-main"><a href="#research">Research, Scholarship, and/or Creative Work</a></span>
-        </li>
-        <li>
-          <span class="toc-page" data-target="#portfolio"></span>
-          <span class="toc-main"><a href="#portfolio">Portfolio</a></span>
-        </li>
-      </ol>
-    </nav>
-  </div>
+<!--
+  Contents page (book only). Laid out like the section dividers: the page body is twelve
+  rows by ten columns, and each entry names the columns (--c1 to --c2, grid lines 1-11)
+  and the row it starts on (--r), plus the short thick rule above it (--bw length, --bh thickness). Move an entry by changing those numbers. Page numbers
+  are filled in by assemble-book.js from each data-target.
+-->
+<section class="part-start divider toc-front" id="toc" style="--eb-l:4.5rem;--ebh-l:6px;--eb-r:100%;--ebh-r:1px;--tb-col:1;--tb-len:2;--tb-h:6px">
+  <h1 class="divider-title"><span class="divider-line c2 leader">CONTENTS</span></h1>
+
+  <a class="toc-entry" href="#cv" style="--c1:2;--c2:6;--r:4;--bw:4.5rem;--bh:6px">
+    <span class="toc-page" data-target="#cv"></span>
+    <span class="toc-main">Curriculum Vitae</span>
+  </a>
+  <a class="toc-entry" href="#intro" style="--c1:6;--c2:11;--r:6;--bw:4.5rem;--bh:6px">
+    <span class="toc-page" data-target="#intro"></span>
+    <span class="toc-main">Introduction</span>
+  </a>
+  <a class="toc-entry" href="#research" style="--c1:3;--c2:11;--r:8;--bw:4.5rem;--bh:6px">
+    <span class="toc-page" data-target="#research"></span>
+    <span class="toc-main">Research, Scholarship, and/or Creative Work</span>
+  </a>
+  <a class="toc-entry" href="#portfolio" style="--c1:5;--c2:11;--r:11;--bw:4.5rem;--bh:6px">
+    <span class="toc-page" data-target="#portfolio"></span>
+    <span class="toc-main">Portfolio</span>
+  </a>
 </section>

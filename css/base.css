@@ -225,12 +225,36 @@ body{
    the same way. What differs is the list of facts, which gets its own mix of
    rules, and a little vertical drift between the two columns on the web. */
 .cover-divider{ min-height: 0; }
+/* Every rule on the cover except the facts' own is a whole number of grid columns long and
+   starts on a column edge: --cs is one column step, measured against the title's width (the
+   full grid), so n columns = n * --cs - the gap. The eyebrow bars are sized the same way in the
+   cover's style attribute; the bar under the title is placed by --tb-col / --tb-len. */
+.cover-divider .divider-title{
+  container-type: inline-size;
+  --cs: calc((100cqw - 9 * var(--cover-grid-gap)) / 10 + var(--cover-grid-gap));
+}
+.cover-divider .divider-line.dash, .cover-divider .divider-line.leader{ gap: 0; }
+.cover-divider .divider-line.dash{ width: calc(6 * var(--cs) - var(--cover-grid-gap)); }  /* ends on column 6 */
+.cover-divider .divider-line.dash::after{ width: calc(2 * var(--cs) - var(--cover-grid-gap)); margin-left: auto; }
+.cover-divider .divider-line.leader::after{ flex: none; width: calc(3 * var(--cs) - var(--cover-grid-gap)); margin-left: auto; }  /* columns 8-10 */
 .cover-divider .cover-facts{ grid-row: 3; margin-top: 3.5rem; gap: 1.6rem; }
 .cover-divider .cover-nav{ grid-row: 3; margin-top: 6rem; }
-.cover-fact:nth-child(1)::before{ width: 4.5rem; height: 6px; }
-.cover-fact:nth-child(2)::before{ width: 100%;   height: 1px; }
-.cover-fact:nth-child(3)::before{ width: 7rem;   height: 6px; }
+/* the three facts share one rule: a thick bar one grid column wide (the facts span columns 3-6,
+   so a column is a quarter of their width less the gaps) */
+.cover-divider .cover-facts{ container-type: inline-size; }
+.cover-fact::before{
+  width: calc((100cqw - 3 * var(--cover-grid-gap)) / 4);
+  height: 6px;
+}
 .cover-fact{ padding-top: 1.3rem; line-height: 1.2; }
+
+/* Phones: the grid is a single column, so the cover and divider pieces just stack in the order
+   they are written (eyebrows, title, facts, list) instead of sharing the desktop's fixed rows. */
+@media (max-width: 900px){
+  .divider .cover-eyebrow, .divider .divider-title,
+  .divider .cover-facts, .divider .cover-nav{ grid-row: auto; }
+  .cover-divider .cover-facts, .cover-divider .cover-nav, .divider .cover-nav{ margin-top: 3rem; }
+}
 
 /* ---------- Part titles (CV / Intro / Research / Portfolio openers) ----------
    The short rule above the label and the tighter, stacked headline
@@ -298,18 +322,31 @@ section.part-start:has(+ section .cv-category) .content{
 /* Row hooks for sections that run a margin-note in step with a
    specific paragraph — set via class, not inline style, so the
    narrow-viewport override below can actually win the cascade. */
+/* A section that runs straight on into the next one: paragraph spacing, not section spacing. */
+section.run-on{ margin-bottom: 1.15rem; }
 .row-1{ grid-row: 1; }
 .row-2{ grid-row: 2; }
 .row-3{ grid-row: 3; }
 
-section .num{
-  display: block;
-  font-family: var(--serif);
-  font-style: italic;
-  color: var(--clay);
-  font-size: 0.95rem;
-  margin-bottom: 0.35rem;
+/* Roman numerals in the Research headings: set like the CV section headers (.cv-category) and
+   hung in the left column where the CV's dates sit, right-aligned, no rule. */
+section h2 .num{
+  float: left;
+  width: calc(var(--cover-column-step) - var(--cover-grid-gap));
+  margin-left: calc(0px - var(--cover-column-step));
+  text-align: right;
+  font-family: var(--serif-display);
+  font-style: normal;
+  font-weight: 300;
+  font-size: 1.15rem;
+  line-height: calc(1.3 * 1.7rem);   /* the heading's own line height, so they share a line */
+  position: relative;
+  top: 3px;                          /* drops it onto the heading's baseline (smaller type sits higher) */
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
 }
+/* the first side image of a section starts below the heading, clear of the numeral */
 
 section h2{
   font-family: var(--serif-display);
@@ -395,7 +432,17 @@ section h4.subproject{ font-size: 1.2rem; }
 p{ margin: 0 0 1.15rem; }
 p:last-child{ margin-bottom: 0; }
 strong{ font-weight: 600; }
-em{ font-style: italic; }
+/* Dates in running text are set in Tiempos Fine with lining figures (the face's own figures are lining;
+   lining-nums is asked for explicitly in case a font with old-style figures is ever swapped in). */
+.date{
+  font-family: var(--serif-display);
+  font-style: normal;
+  font-weight: 400;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+}
+/* Every italic is Tiempos (italic-only cut), never Inter. */
+em, i, cite{ font-style: italic; font-family: var(--serif); }
 
 /* Opening paragraph treatment for a chapter — TiemposText only ships
    as an italic cut (same as the CV's .overview), so it has to be set
@@ -404,8 +451,11 @@ em{ font-style: italic; }
 .lede{
   font-family: var(--serif);
   font-style: italic;
-  font-size: 1.15rem;
+  font-size: 1.5rem;
   line-height: 1.55;
+  /* starts at the left edge of the side-image column: the images span the two grid columns
+     left of the text, and the text (6 of the 10 columns) is 100% wide here */
+  margin-left: calc(-2 * (100% + var(--cover-grid-gap)) / 6);
 }
 
 .callout{
@@ -425,6 +475,29 @@ em{ font-style: italic; }
 }
 .margin-note.right{ grid-column: 1; }
 .margin-note.left{ grid-column: 1; }
+/* A note sits inside the block of text it belongs to (first child of its .content) and hangs in
+   the column to the left of it, taken out of the flow: it never sets the height of the text, so
+   a tall picture can't leave a gap in the body copy, and it always stays with its paragraph when
+   the book breaks pages. js/stack-notes.js keeps neighbouring notes from overlapping. The note
+   spans the two grid columns left of the text (text = 6 of 10 columns, so 100% here). */
+.content{ position: relative; }
+.content > .margin-note{
+  position: absolute;
+  top: 0;
+  right: calc(100% + var(--cover-grid-gap));
+  width: calc(2 * (100% + var(--cover-grid-gap)) / 6 - var(--cover-grid-gap));
+  margin: 0;
+  padding-top: 0.15rem;
+}
+/* consecutive blocks of text in one section are separate grid rows: give them paragraph spacing */
+section.flow .content + .content{ margin-top: 1.15rem; }
+/* the first note of a section starts just below the heading's numeral line */
+.content > .margin-note.below-head{ margin-top: calc(1.3 * 1.7rem + 0.4rem); }
+/* the row hooks have to follow the generic grid-row above, or every note falls into row 1 and
+   notes in later rows sit on top of each other */
+.margin-note.row-1{ grid-row: 1; }
+.margin-note.row-2{ grid-row: 2; }
+.margin-note.row-3{ grid-row: 3; }
 .margin-note img{
   width: 100%;
   display: block;
@@ -695,7 +768,8 @@ em{ font-style: italic; }
   column-gap: var(--cover-grid-gap);
   width: calc(100% + var(--cover-column-step));
   margin-left: calc(0px - var(--cover-column-step));
-  margin-bottom: calc(0.9rem + 0.75rem);
+  margin-bottom: 0;
+  padding-top: 0.5em;
   padding-bottom: 0.15em;
 }
 .cv-entry::after{
@@ -706,9 +780,6 @@ em{ font-style: italic; }
   bottom: 0;
   border-top: 1px solid var(--rule);
 }
-.cv-entry:last-child::after,
-.cv-entry:has(+ .cv-group)::after{ display: none; }
-.cv-group:has(+ .cv-entry) .cv-entry:last-child::after{ display: block; }
 .cv-entry .cv-when{
   position: relative;
   grid-column: 1;
@@ -739,13 +810,14 @@ em{ font-style: italic; }
   align-self: baseline;
   margin: 0;
 }
+.cv-entry .cv-desc p{ margin: 0 0 0.5rem; }
 .cv-entry .cv-desc{
   grid-column: 2;
   margin-top: 0.3rem;
   color: var(--ink-soft);
 }
 .cv-note{
-  font-family: var(--sans);
+  font-family: var(--serif);
   font-size: 0.82rem;
   color: var(--clay);
   font-style: italic;
@@ -965,7 +1037,19 @@ em{ font-style: italic; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top;
 }
+.evidence-item .evidence-thumb:has(img){
+  padding: 0;
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.evidence-item .evidence-thumb a{ display: block; width: 100%; height: 100%; }
+/* landscape items (a magazine spread, a card) run two columns wide */
+.evidence-grid{ grid-auto-flow: dense; }
+.evidence-item--wide{ grid-column: span 2; }
+.evidence-item--wide .evidence-thumb{ aspect-ratio: 3 / 2; }
+.evidence-item--wide .evidence-thumb img{ object-position: center; }
 .evidence-item .evidence-label{
   margin-top: 0.5rem;
   font-family: var(--sans);
@@ -1015,6 +1099,10 @@ a{ color: inherit; }
   footer.colophon{ padding-inline: clamp(1.25rem, 8vw, 3.5rem); }
   section .content{ grid-column: 1; }
   section:has(.cv-category) .content{ grid-column: 1; }
+  .lede{ margin-left: 0; }
+  section h2 .num{ float: none; display: block; width: auto; margin-left: 0; text-align: left; line-height: 1.4; margin-bottom: 0.3rem; top: 0; }
+  .margin-note.below-head{ margin-top: 1.2rem; }
+  .content > .margin-note{ position: static; width: auto; max-width: 260px; margin: 0 0 1.2rem; }
   section:has(.cv-category){
     grid-template-columns: 1fr;
   }

@@ -121,7 +121,7 @@ def render_entry(entry):
         if org:
             what_parts.append(org.text())
         what = ", ".join(p for p in what_parts if p)
-        desc_html = f'<p class="cv-desc">{desc.inner_html()}</p>' if desc else ""
+        desc_html = f'<div class="cv-desc">{desc.inner_html()}</div>' if desc else ""
         return (
             f'<div class="cv-entry"><span class="cv-when">{when}</span>'
             f'<p class="cv-what">{what}</p>{desc_html}</div>'
@@ -133,6 +133,16 @@ def render_entry(entry):
     body_node = entry.find(body_cls)
     when = date.text() if date else ""
     what = clean_inline(body_node.inner_html()) if body_node else ""
+    if entry.has_class("cite"):
+        # the title of the work, which the source CV sets in quotation marks, becomes the
+        # entry's italic Tiempos title (same .ln-title as the other entries); the quote marks go
+        what = re.sub(r'(?<![=\w])"([^"<>]+)"', r'<span class="ln-title">\1</span>', what, count=1)
+        what = re.sub(r'(?<![=\w])\u201c([^\u201c\u201d<>]+)\u201d', r'<span class="ln-title">\1</span>', what, count=1) if 'ln-title' not in what else what
+        if 'ln-title' not in what and '<em>' not in what:
+            # studio and critique entries have no quoted title: the first sentence after the
+            # author (and after "Guest Critic,") is the studio or class title
+            what = re.sub(r'^(Walker, Renée\.? (?:(?:Guest )?Critic, )?)([^.<]+\.)(?= )',
+                          r'\1<span class="ln-title">\2</span>', what, count=1)
     return (
         f'<div class="cv-entry"><span class="cv-when">{when}</span>'
         f'<p class="cv-what">{what}</p></div>'
@@ -165,6 +175,7 @@ def main():
     out.append('  <h1 class="divider-title" id="cv"><span class="divider-line c1 leader">CURRICULUM</span><span class="divider-line c4">VITAE</span></h1>')
     out.append('</section>')
 
+    after_overview = False
     for sec in secs:
         sec_title = sec.find("sec-title")
         title_text = sec_title.text() if sec_title else "(untitled)"
@@ -174,9 +185,17 @@ def main():
         # break-after:avoid-page on headings (book.css) so a heading is
         # never stranded alone at a page bottom, reads much more like an
         # actual CV.
-        out.append('<section>')
+        is_overview = sec.find("overview") is not None
+        out.append('<section class="new-page">' if after_overview else '<section>')
+        after_overview = is_overview
         out.append('  <div class="content">')
         out.append(f'    <p class="cv-category">{title_text}</p>')
+
+        overview = sec.find("overview")
+        if overview is not None:
+            for para in overview.children:
+                if isinstance(para, Node) and para.tag == "p":
+                    out.append(f'    <p class="lede">{para.inner_html()}</p>')
 
         subsecs = [c for c in sec.children if isinstance(c, Node) and c.has_class("subsec")]
         for subsec in subsecs:
