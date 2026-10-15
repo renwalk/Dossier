@@ -12,29 +12,41 @@
     "assets/portfolio/seeing-bird-songs/cardinal-spectrogram.jpg"
   ],
   "pages": {
-    "before:toc": {
+    "before:colophon": {
       "image": "assets/portfolio/moonflower/07-moonflower-unfurling.jpg",
       "zoom": 450,
       "x": 50,
       "y": 40
     },
+    "before:toc": {
+      "image": "assets/portfolio/energy-bodies/Energy-Bodies-3.jpg",
+      "zoom": 320,
+      "x": 50,
+      "y": 45
+    },
     "after:cv": {
       "image": "assets/portfolio/energy-bodies/Energy-Bodies-2.jpg",
-      "zoom": 420,
-      "x": 40,
-      "y": 30
+      "zoom": 320,
+      "x": 50,
+      "y": 40
     },
     "before:cv": {
       "image": "assets/portfolio/energy-bodies/Energy-Bodies-1.jpg",
-      "zoom": 450,
-      "x": 40,
-      "y": 55
+      "zoom": 320,
+      "x": 50,
+      "y": 42
     },
     "before:seeing-bird-songs": {
       "image": "assets/portfolio/seeing-bird-songs/cardinal-spectrogram.jpg",
       "zoom": 380,
       "x": 45,
       "y": 50
+    },
+    "before:testing-wisely": {
+      "image": "assets/portfolio/testing-wisely/03-testingPlayground.png",
+      "zoom": 790,
+      "x": 23,
+      "y": 38
     }
   }
 }

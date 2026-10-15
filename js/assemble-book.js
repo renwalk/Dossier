@@ -13,6 +13,7 @@ import { stackNotes } from './stack-notes.js';
 
 const SECTIONS = [
   'sections/00-cover.html',
+  'sections/00a-colophon.html',
   'sections/01-frontmatter.html',
   'sections/02-cv.html',
   'sections/03-intro.html',
@@ -28,6 +29,35 @@ const STYLESHEETS = [
   'css/book.css',
 ];
 
+// Where the online edition lives. Each Part page in the book carries a link to its own section of the
+// site (the anchors are the Part titles' ids). Change SITE if the dossier is published elsewhere.
+const SITE = 'https://renee-walker.com/';
+const PART_LINKS = ['cv', 'intro', 'research', 'portfolio'];
+
+// Adds a "read this section online" link to the four Part pages. Book only: this file is not used by the website.
+function addPartLinks(html) {
+  const tpl = document.createElement('template');
+  tpl.innerHTML = html;
+  PART_LINKS.forEach((id) => {
+    const section = tpl.content.querySelector(`#${id}`)?.closest('section');
+    if (!section) return;
+    const a = document.createElement('a');
+    a.className = 'part-weblink';
+    a.href = `${SITE}#${id}`;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    const label = document.createElement('span');
+    label.className = 'pw-label';
+    label.textContent = 'This section online';
+    const url = document.createElement('span');
+    url.className = 'pw-url';
+    url.textContent = `${SITE.replace(/^https?:\/\//, '').replace(/\/$/, '')}/#${id} \u2197`;
+    a.append(label, url);
+    section.appendChild(a);
+  });
+  return tpl.innerHTML;
+}
+
 async function assemble() {
   const parts = await Promise.all(
     SECTIONS.map(async (url) => {
@@ -36,7 +66,8 @@ async function assemble() {
       return res.text();
     })
   );
-  const content = printUrlsForLivePlates(parts.join('\n'));
+  const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const content = addPartLinks(printUrlsForLivePlates(parts.join('\n').replaceAll('{{BUILD_DATE}}', today)));
   // Render into a dedicated container, not document.body — the
   // static nav bar above needs to stay put and keep working (as a
   // normal position:sticky header) outside whatever Paged.js does
@@ -47,6 +78,7 @@ async function assemble() {
   console.log(`Rendered ${flow.total} pages.`);
   fillTocPageNumbers();
   await textureBlankPages();
+  addFolios();
   stackNotes();
   wirePrintButton();
 }
@@ -161,6 +193,44 @@ function projectImages(pages, i, label) {
   return [...new Set(out)];
 }
 
+// Running header + page number, added to each text page after layout: the Part name at the top and the
+// page number at the foot, both starting on the left edge of the body text (css/book.css, .folio-head /
+// .folio-foot). The cover, divider pages (Part, group and Contents pages) and the blank texture pages get
+// neither. The Part name carries forward from the last Part page, like the string the margin box used
+// to show.
+function addFolios() {
+  let part = '';
+  const pages = [...document.querySelectorAll('.pagedjs_pages .pagedjs_page')];
+  pages.forEach((page, i) => {
+    const partEl = [...page.querySelectorAll('.divider-part, .part-title')].pop();
+    if (partEl) part = partEl.textContent.trim();
+    const skip =
+      i === 0 ||                                           // the cover
+      page.classList.contains('pagedjs_blank_page') ||     // texture pages
+      page.querySelector('.cover-page, section.divider, .colophon-page');  // Part / group / Contents / colophon pages
+    if (skip) return;
+    const sheet = page.querySelector('.pagedjs_sheet') || page;
+    if (part) {
+      const head = document.createElement('div');
+      head.className = 'folio-head';
+      head.setAttribute('aria-hidden', 'true');
+      const name = document.createElement('span');
+      name.className = 'folio-part';
+      name.textContent = part;
+      head.appendChild(name);
+      sheet.appendChild(head);
+    }
+    const foot = document.createElement('div');
+    foot.className = 'folio-foot';
+    foot.setAttribute('aria-hidden', 'true');
+    const num = document.createElement('span');
+    num.className = 'folio-num';
+    num.textContent = page.dataset.pageNumber;
+    foot.appendChild(num);
+    sheet.appendChild(foot);
+  });
+}
+
 async function textureBlankPages() {
   const cfg = await loadTextureConfig();
   const pool = cfg.default || [];
@@ -181,8 +251,10 @@ async function textureBlankPages() {
     const img = set.image || (source.length ? source[Math.floor(rand() * source.length)] : null);
     // draw the random numbers unconditionally so unset options stay stable
     const zoom = set.zoom ?? Math.round(300 + rand() * 300);
-    const x = set.x ?? Math.round(rand() * 100);
-    const y = set.y ?? Math.round(rand() * 100);
+    // random crops stay in the middle of the image (30-70): the artwork sits there, and the far edges
+    // of many images are plain background
+    const x = set.x ?? Math.round(30 + rand() * 40);
+    const y = set.y ?? Math.round(30 + rand() * 40);
     console.log(`Blank page ${n} (${label}): ${img || 'plain'}${own.length ? ' [from the project]' : ''}`);
     if (!img || img === 'none') return;
     const tex = document.createElement('div');

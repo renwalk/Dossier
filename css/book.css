@@ -25,16 +25,17 @@
   margin-bottom: 1in;
 }
 
-/* Binding gutter: assumes left-edge binding. The inside margin (near
-   the spine) is wider than the outside margin, and swaps sides
-   between right- and left-hand pages. */
+/* Binding gutter: assumes left-edge binding, so the spine is the LEFT edge of a right-hand page
+   and the RIGHT edge of a left-hand page. The inside margin (near the spine) is the wider one
+   and the outside margin the tighter one; they swap sides from page to page. Together they are
+   always 1.6in, so the text area and the grid are the same width on every page. */
 @page :right{
-  margin-left: 0.65in;  /* outside edge */
-  margin-right: 0.95in; /* inside edge / gutter */
+  margin-left: 0.95in;  /* inside edge / gutter (spine) */
+  margin-right: 0.65in; /* outside edge */
 }
 @page :left{
-  margin-left: 0.95in; /* inside edge / gutter */
-  margin-right: 0.65in; /* outside edge */
+  margin-left: 0.65in;  /* outside edge */
+  margin-right: 0.95in; /* inside edge / gutter (spine) */
 }
 
 /* No running head/footer on the cover or the very first page. */
@@ -262,6 +263,9 @@ section h2 .num{
 }
 /* notes hang beside their text (see base.css); in the book they are --note-w wide */
 .content > .margin-note{ width: var(--note-w); margin: 0; }
+/* a side image takes no room of its own, so keep it with the first lines of its text: never break between them */
+.content > .margin-note{ break-after: avoid; }
+.content > .margin-note + *{ break-before: avoid; }
 .content > .margin-note.below-head{ margin-top: calc(1.3 * 13pt + 0.4rem); }   /* just clears the numeral's line */
 .callout{ font-size: 10.5pt; }
 
@@ -334,18 +338,48 @@ section.divider .cover-nav{
 .part-title, .divider-part{
   string-set: chapter-title content();
 }
+/* ---------- Running header and page number ----------
+   Not drawn by the page margin boxes: js/assemble-book.js adds the Part name (.folio-head, at the top
+   of the page) and the page number (.folio-foot, at the foot) after layout. Both start on the left edge
+   of the body text. Group, part and contents pages (dividers), the cover and the texture pages get neither.
+   The body text starts --folio-inset (1.78in) in from the edge of the text area: the grid's side gutter
+   plus the two columns to its left. */
+:root{ --folio-inset: 1.78in; }
 @page{
-  @top-center{
-    content: string(chapter-title);
-    font-family: var(--sans);
-    font-size: 8pt;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-  }
+  @top-center{ content: none; }
+  @bottom-center{ content: none; }
+}
+.folio-head, .folio-foot{
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.folio-head{ top: 0.46in; }
+.folio-foot{ bottom: 0.46in; }
+/* both span the text area; the margins swap sides from page to page */
+.pagedjs_right_page .folio-head, .pagedjs_right_page .folio-foot{ left: 0.95in; right: 0.65in; }
+.pagedjs_left_page  .folio-head, .pagedjs_left_page  .folio-foot{ left: 0.65in; right: 0.95in; }
+.folio-part{
+  margin-left: var(--folio-inset);
+  font-family: var(--sans);
+  font-size: 8pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.folio-num{
+  margin-left: var(--folio-inset);
+  font-family: var(--serif-display);   /* Tiempos Fine, lining figures */
+  font-weight: 400;
+  font-size: 9pt;
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+  color: var(--ink);
 }
 
-/* ---------- Page numbers ----------
+/* ---------- Page numbers (notes) ----------
    The cover is unnumbered (suppressed via @page :first above);
    everything else, including the TOC, is numbered continuously.
 
@@ -358,14 +392,6 @@ section.divider .cover-nav{
    numbering, especially since the CV and portfolio will keep growing —
    hand-typed page numbers would go stale the next time content is
    added. If pagedjs fixes this upstream, the reset can go back. */
-@page{
-  @bottom-center{
-    content: counter(page);
-    font-family: var(--sans);
-    font-size: 9pt;
-    color: var(--ink-soft);
-  }
-}
 
 /* ---------- Part breaks ----------
    Force every Part (CV / Narrative / Portfolio) to start on a
@@ -424,12 +450,29 @@ section.plate-page--single .fig.fig--fill img{
   object-position: 50% 40%;
 }
 
-/* ---------- Evidence appendix: three across, landscape items two wide ---------- */
-.evidence-grid{
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.28in 0.16in;
+/* ---------- Evidence appendix pages ----------
+   One page body each: the grid of equal cells on top (to the grid's side edges), a single numbered caption block
+   pinned to the foot in the body-text column, like the image pages. */
+section.evidence-page{
+  height: var(--body-h);
+  margin-bottom: 0;
+  grid-template-rows: auto minmax(0, 1fr) auto;
 }
-.evidence-item .evidence-label{ font-size: 7.5pt; }
+section.evidence-page .content{ grid-row: 1; }
+section.evidence-page .evidence-grid{
+  grid-row: 2;
+  align-content: start;
+  gap: 0.28in 0.16in;
+  margin-top: 0.2in;
+}
+section.evidence-page .evidence-captions{
+  grid-row: 3;
+  grid-column: 3 / 10;
+  align-self: end;
+  margin-top: 0;
+}
+.evidence-captions li{ font-size: 7.5pt; margin-bottom: 0.06in; }
+.evidence-item .ev-num{ font-size: 8pt; }
 
 /* ---------- Running text sections (Part Three) ----------
    section.flow follows the one before it on the same page, like the Introduction,
@@ -503,4 +546,52 @@ section.toc-front .divider-title::after{ display: none; }   /* no bar under the 
   font-size: 16pt;
   line-height: 1.3;
   letter-spacing: 0.005em;
+}
+
+/* ---------- Colophon page (first text page, after the inside-cover image) ----------
+   Small type in the body-text column, sitting at the foot of the page. No page number. */
+section.colophon-page{
+  height: var(--body-h);
+  margin-bottom: 0;
+  grid-template-rows: minmax(0, 1fr);
+  break-after: page;
+}
+section.colophon-page .content{
+  grid-column: 3 / 10;
+  align-self: end;
+}
+section.colophon-page p{
+  margin: 0 0 0.85em;
+  font-size: 8.5pt;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+section.colophon-page p:last-child{ margin-bottom: 0; }
+
+/* ---------- "This section online" links on the Part pages (book only; see addPartLinks in assemble-book.js) ----------
+   Bottom-left of each Part page, starting on the body-text column. */
+.part-weblink{
+  grid-column: 3 / 7;   /* the body-text column only: the right-hand column holds the Part's own list */
+  grid-row: 12;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+.part-weblink .pw-label{
+  font-family: var(--sans);
+  font-size: 7.5pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.part-weblink .pw-url{
+  font-family: var(--serif-display);
+  font-size: 12pt;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-decoration-thickness: 0.5pt;
+  text-underline-offset: 0.15em;
 }

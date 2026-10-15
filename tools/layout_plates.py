@@ -31,7 +31,7 @@ is made up of kept pages, step 4 can't change its page count; the tool says so w
 blank page will follow.
 
 Images never change order. Text pages, dividers and live pieces are left alone.
-Page geometry mirrors css/book.css (US Letter, 1in top and bottom, 0.65in/0.95in sides,
+Page geometry mirrors css/book.css (US Letter, 1in top and bottom, 0.65in outside / 0.95in inside sides,
 ten-column grid); change the constants below if those change.
 """
 import math, os, re, subprocess
