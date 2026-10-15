@@ -31,7 +31,7 @@ const STYLESHEETS = [
 
 // Where the online edition lives. Each Part page in the book carries a link to its own section of the
 // site (the anchors are the Part titles' ids). Change SITE if the dossier is published elsewhere.
-const SITE = 'https://renee-walker.com/';
+const SITE = 'https://dossier.renee-walker.com/';
 const PART_LINKS = ['cv', 'intro', 'research', 'portfolio'];
 
 // Adds a "read this section online" link to the four Part pages. Book only: this file is not used by the website.
