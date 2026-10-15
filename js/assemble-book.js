@@ -141,6 +141,26 @@ function blankPageLabel(pages, i) {
   return prev ? `after:${prev}` : `page:${pages[i].dataset.pageNumber}`;
 }
 
+// A blank page that sits right before a portfolio project's opener ("before:<project id>") pulls its
+// image from that project: any large image on the project's own pages, picked by the page's seed.
+// Pages before other things (group dividers, the CV) use the default pool instead.
+function projectImages(pages, i, label) {
+  const m = label.match(/^before:(.+)$/);
+  if (!m) return [];
+  const opener = pages[i + 1]?.querySelector('#' + CSS.escape(m[1]));
+  if (!opener || !/\b(subproject|project-title)\b/.test(opener.className)) return [];
+  const out = [];
+  for (let k = i + 1; k < pages.length; k++) {
+    const pg = pages[k];
+    // stop at the next heading with an id (the next project) or a divider page
+    if (k > i + 1 && (pg.querySelector('h1[id], h2[id], h3[id]') || pg.querySelector('.divider'))) break;
+    pg.querySelectorAll('.pagedjs_page_content img').forEach((img) => {
+      if (!img.closest('.page-texture') && img.naturalWidth >= 1000) out.push(img.getAttribute('src'));
+    });
+  }
+  return [...new Set(out)];
+}
+
 async function textureBlankPages() {
   const cfg = await loadTextureConfig();
   const pool = cfg.default || [];
@@ -156,12 +176,14 @@ async function textureBlankPages() {
     if (n < from && !chosen[label]) return;
     const rand = seeded(n);
     const set = chosen[label] || {};
-    const img = set.image || (pool.length ? pool[Math.floor(rand() * pool.length)] : null);
+    const own = set.image ? [] : projectImages(pages, i, label);
+    const source = own.length ? own : pool;
+    const img = set.image || (source.length ? source[Math.floor(rand() * source.length)] : null);
     // draw the random numbers unconditionally so unset options stay stable
     const zoom = set.zoom ?? Math.round(300 + rand() * 300);
     const x = set.x ?? Math.round(rand() * 100);
     const y = set.y ?? Math.round(rand() * 100);
-    console.log(`Blank page ${n} (${label}): ${img || 'plain'}`);
+    console.log(`Blank page ${n} (${label}): ${img || 'plain'}${own.length ? ' [from the project]' : ''}`);
     if (!img || img === 'none') return;
     const tex = document.createElement('div');
     tex.className = 'page-texture';

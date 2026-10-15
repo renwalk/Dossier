@@ -29,6 +29,12 @@
       "zoom": 450,
       "x": 40,
       "y": 55
+    },
+    "before:seeing-bird-songs": {
+      "image": "assets/portfolio/seeing-bird-songs/cardinal-spectrogram.jpg",
+      "zoom": 380,
+      "x": 45,
+      "y": 50
     }
   }
 }
