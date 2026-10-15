@@ -31,6 +31,24 @@ async function assemble() {
   watchNotes(container);
   revealNavPastCover();
   wireLiveEmbeds(container);
+  goToHash();
+}
+
+// The sections arrive after the page has loaded, so the browser has already looked for #cv, #research
+// and the rest and found nothing. Scroll to the one in the address once the text is in place, and
+// again when images and fonts have settled (they move things down), unless the reader has already
+// started scrolling.
+function goToHash() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (!id) return;
+  let moved = false;
+  const stop = () => { moved = true; };
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach((t) => addEventListener(t, stop, { once: true, passive: true }));
+  const go = () => { if (!moved) document.getElementById(id)?.scrollIntoView({ behavior: 'instant' }); };
+  go();
+  if (document.readyState !== 'complete') addEventListener('load', go, { once: true });
+  document.fonts?.ready.then(go);
+  setTimeout(go, 1500);
 }
 
 // Live plates (.plate--live) ship as a poster + button; the iframe only

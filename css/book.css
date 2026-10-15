@@ -1,3 +1,19 @@
+/* Print-quality Tiempos (desktop OTFs) for the book.
+   Files live in fonts-print/ (git-ignored, never published). If they are
+   missing, e.g. on the hosted site, the browser falls back to the web woff2. */
+@font-face{
+  font-family: 'TiemposFine';
+  src: url('../fonts-print/TiemposFine-Light.otf') format('opentype'),
+       url('../fonts/tiempos-fine-light.woff2') format('woff2');
+  font-weight: 300; font-style: normal;
+}
+@font-face{
+  font-family: 'TiemposText';
+  src: url('../fonts-print/TiemposText-RegularItalic.otf') format('opentype'),
+       url('../fonts/tiempos-text-regular-italic.woff2') format('woff2');
+  font-weight: 400; font-style: italic;
+}
+
 /* ---------- Pagination layer (Paged.js) ----------
    Everything specific to turning the flowed HTML into book pages:
    trim size, binding gutter, running heads, page numbering, and

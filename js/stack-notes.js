@@ -5,6 +5,9 @@
 // one above it down just far enough to clear it. It only moves notes visually (translateY), so
 // the text and the page breaks never change.
 //
+// Each note is first lined up so the top of its picture sits level with the top of the capital letters
+// on the first line of its paragraph (not the top of the line box, which sits a little higher).
+//
 // In the book each page is its own space: a note is also kept inside the page's text area, so a
 // note near the foot of a page is moved up rather than running off the page.
 
@@ -14,6 +17,7 @@ export function stackNotes(root = document) {
   const notes = [...root.querySelectorAll('.margin-note')];
   notes.forEach((n) => { n.style.transform = ''; });
   if (window.innerWidth <= 900 && !document.querySelector('.pagedjs_pages')) return; // phone layout: notes are in the flow
+  notes.forEach(alignToFirstLine);
 
   // group by page (book) or one group for the whole scrolling page (web)
   const groups = new Map();
@@ -48,6 +52,31 @@ export function stackNotes(root = document) {
   });
 }
 
+// Move a note so its picture's top edge meets the cap height of its paragraph's first line.
+let ruler;
+function alignToFirstLine(note) {
+  let p = note.nextElementSibling;
+  while (p && p.tagName !== 'P') p = p.nextElementSibling;
+  const img = note.querySelector('img');
+  if (!p || !img) return;
+  const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+  let text;
+  while ((text = walker.nextNode())) if (text.nodeValue.trim()) break;
+  if (!text) return;
+  const start = text.nodeValue.search(/\S/);
+  const range = document.createRange();
+  range.setStart(text, start);
+  range.setEnd(text, start + 1);
+  const line = range.getClientRects()[0];
+  if (!line) return;
+  ruler = ruler || document.createElement('canvas').getContext('2d');
+  ruler.font = getComputedStyle(text.parentElement).font;
+  const m = ruler.measureText('H');
+  // the text rectangle is the font's full ascent-to-descent box; the capitals start below its top
+  const capTop = line.top + (m.fontBoundingBoxAscent - m.actualBoundingBoxAscent);
+  shift(note, capTop - img.getBoundingClientRect().top);
+}
+
 function shift(note, dy) {
   const cur = parseFloat((note.style.transform.match(/translateY\((-?[\d.]+)px\)/) || [0, 0])[1]);
   note.style.transform = `translateY(${cur + dy}px)`;
@@ -62,5 +91,6 @@ export function watchNotes(root = document) {
   let t;
   window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(run, 150); });
   window.addEventListener('load', run);
+  if (document.fonts?.ready) document.fonts.ready.then(run);
   run();
 }

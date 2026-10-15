@@ -432,11 +432,11 @@ section h4.subproject{ font-size: 1.2rem; }
 p{ margin: 0 0 1.15rem; }
 p:last-child{ margin-bottom: 0; }
 strong{ font-weight: 600; }
-/* Dates in running text are set in Tiempos Fine with lining figures (the face's own figures are lining;
-   lining-nums is asked for explicitly in case a font with old-style figures is ever swapped in). */
+/* Dates in running text are set in Tiempos Text italic (the same face as every other italic) with lining
+   figures asked for explicitly. */
 .date{
-  font-family: var(--serif-display);
-  font-style: normal;
+  font-family: var(--serif);       /* Tiempos Text italic, like the other italics */
+  font-style: italic;
   font-weight: 400;
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum" 1;
@@ -1036,15 +1036,28 @@ section.flow .content + .content{ margin-top: 1.15rem; }
 }
 .evidence-item .evidence-thumb:has(img){
   padding: 0;
-  border: 1px solid var(--rule);
+  border: 0;
   overflow: hidden;
 }
+.evidence-item .evidence-thumb.boxed:has(img){ border: 1px solid var(--rule); }
 .evidence-item .evidence-thumb a{
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
+}
+/* Landscape images are turned a quarter-turn clockwise so they stand upright in the portrait cells like the
+   rest. The cell is 4:5, so its height is 125% of its width: that is the width the rotated image gets. */
+.evidence-item .evidence-thumb img.rot{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 125%;
+  max-width: none;
+  max-height: none;
+  transform: translate(-50%, -50%) rotate(90deg);
 }
 .evidence-item .evidence-thumb img{
   display: block;
