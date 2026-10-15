@@ -45,7 +45,8 @@ list) so its image pages land as left/right pairs. A project with sub-projects (
 Intersections) opens on the left (`spread-left`) so the first sub-project faces it.
 
 **Images.** One folder per entry in `assets/portfolio/`, web-sized (about 2000px JPEG). Keep camera
-originals in an `originals/` subfolder. Reference them as `assets/portfolio/<folder>/<file>`.
+originals, screen recordings and anything else the site doesn't use **outside** this folder (the unused
+files were moved to `~/Documents/Dossier-unused-files/`), so the published site stays small. Reference them as `assets/portfolio/<folder>/<file>`.
 
 **After you add, remove or reorder images**, edit the figures in the HTML and run:
 
